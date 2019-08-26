@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_activity_rl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/main_activity_rl_padding"
+    android:background="@color/white80">
+
+    <!--Dummy layout, for preventing gaining focus on edit texts-->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/book_search_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/search_bar_background"
+        android:layout_centerHorizontal="true"
+        >
+
+        <EditText
+            android:id="@+id/book_search_bar"
+            android:layout_width="@dimen/main_activity_search_bar_max_width"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/main_activity_search_bar_text_size"
+            android:textColor="@color/black85"
+            android:nextFocusUp="@+id/et_alarm_clock_name"
+            android:nextFocusLeft="@+id/et_alarm_clock_name"
+            android:selectAllOnFocus = "true"
+            android:singleLine="true"
+            android:hint="@string/search_bar_hint"
+            android:padding = "@dimen/main_activity_search_bar_padding"
+            />
+
+        <ImageView
+            android:id="@+id/book_search_iv"
+            android:layout_width="@dimen/main_activity_ib_search_max_width"
+            android:layout_height="@dimen/main_activity_ib_search_max_height"
+            android:src = "@drawable/search_icon"
+            android:scaleType="fitXY"
+            android:padding = "@dimen/main_activity_search_bar_padding"
+            />
+
+    </LinearLayout>
+
+<!--           android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890" -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_books"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/book_search_ll">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/main_activity_pb_loading_indicator"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:layout_width="@dimen/main_activity_progress_bar_width"
+        android:layout_height="@dimen/main_activity_progress_bar_height" />
+
+    <ImageButton
+        android:id="@+id/show_cart_btn"
+        android:layout_width="@dimen/main_activity_iv_max_width"
+        android:layout_height="@dimen/main_activity_iv_max_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/main_activity_iv_margin_start"
+        android:background="@drawable/add_to_cart_btn_background"
+        android:src = "@drawable/shopping_cart_icon"
+        android:scaleType="fitXY"
+        />
+
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/bottom_navigation_menu" />-->
+
+</RelativeLayout>

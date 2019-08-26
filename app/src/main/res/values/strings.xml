@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Book Store</string>
+
+    <string name="text_style">monospace</string>
+    <string name="search_bar_hint">Search</string>
+
+    <string name="go_back">✖</string>
+    <string name="apply_cart">Apply cart</string>
+    <string name="sent_data">➤</string>
+    <string name="book_price">Price</string>
+    <string name="book_rating">Rating</string>
+    <string name="book_authors">Author</string>
+    <string name="book_publishers">Publisher</string>
+    <string name="book_published_year">Published</string>
+    <string name="book_amount_of_pages">Pages</string>
+    <string name="book_language">Language</string>
+    <string name="book_description">Language</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="preview">Preview</string>
+    <string name="description">Description</string>
+    <string name="publish_year">Publish year</string>
+
+    <integer name="com_vk_sdk_AppId">7107036</integer>
+</resources>
