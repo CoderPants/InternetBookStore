@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cart_activity_btn_left_margin">10dp</dimen>
+    <dimen name="cart_activity_btn_top_margin">10dp</dimen>
+    <dimen name="cart_activity_btn_right_margin">10dp</dimen>
+
+    <dimen name="cart_activity_tv_top_margin">20dp</dimen>
+    <dimen name="cart_activity_tv_text_size">16sp</dimen>
+    <dimen name="cart_activity_rv_top_margin">20dp</dimen>
+</resources>
