@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "dd48c5d351c01b891dcacfd85c583a77",
+    "entities": [
+      {
+        "tableName": "cached_books",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`generatedID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userRequest` TEXT, `id` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "generatedID",
+            "columnName": "generatedID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userRequest",
+            "columnName": "userRequest",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bookID",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "generatedID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dd48c5d351c01b891dcacfd85c583a77')"
+    ]
+  }
+}
