@@ -9,6 +9,7 @@ public class CachedBook
 {
     @PrimaryKey(autoGenerate = true)
     private long generatedID;
+
     private String userRequest;
     @ColumnInfo(name = "id")
     private long bookID;
@@ -22,7 +23,7 @@ public class CachedBook
         return generatedID;
     }
 
-    public void setGeneratedID(long generatedID) {
+    public void setGeneratedID(int generatedID) {
         this.generatedID = generatedID;
     }
 
@@ -40,5 +41,14 @@ public class CachedBook
 
     public void setBookID(long bookID) {
         this.bookID = bookID;
+    }
+
+    @Override
+    public String toString() {
+        return "CachedBook{" +
+                "generatedID=" + generatedID +
+                ", userRequest='" + userRequest + '\'' +
+                ", bookID=" + bookID +
+                '}';
     }
 }

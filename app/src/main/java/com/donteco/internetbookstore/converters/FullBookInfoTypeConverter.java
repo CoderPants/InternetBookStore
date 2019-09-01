@@ -9,11 +9,12 @@ public class FullBookInfoTypeConverter {
 
     @TypeConverter
     public static JsonObject fromString(String value) {
-        return new JsonParser().parse(value).getAsJsonObject();
+        System.out.println("Value " + value);
+        return (value.equals(""))? new JsonObject(): new JsonParser().parse(value).getAsJsonObject();
     }
 
     @TypeConverter
     public static String fromJsonObject(JsonObject value){
-        return value.getAsString();
+        return (value == null)? "": value.getAsString();
     }
 }

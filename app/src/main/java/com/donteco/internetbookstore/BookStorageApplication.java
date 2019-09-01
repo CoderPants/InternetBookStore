@@ -14,7 +14,7 @@ public class BookStorageApplication extends Application {
 
         Storage.createBooks();
 
-        Repository res = new Repository(this);
+        //Repository res = new Repository(this);
 
         /*Stetho.initialize(Stetho.newInitializerBuilder(this)
                 .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))

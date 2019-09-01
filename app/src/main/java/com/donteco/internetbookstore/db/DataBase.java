@@ -14,7 +14,7 @@ import com.donteco.internetbookstore.converters.FullBookInfoTypeConverter;
 import com.donteco.internetbookstore.dao.CachedBookDao;
 import com.donteco.internetbookstore.dao.FullInfoBooksDao;
 import com.donteco.internetbookstore.dao.ShortenedBooksDao;
-import com.donteco.internetbookstore.help.ConstantsForApp;
+import com.donteco.internetbookstore.constants.ConstantsForApp;
 
 @Database(entities = {ShortenedBookInfo.class, CachedBook.class, FullBookInfo.class}, version = 1)
 

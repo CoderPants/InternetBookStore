@@ -2,7 +2,7 @@ package com.donteco.internetbookstore.request;
 
 import android.os.AsyncTask;
 
-import com.donteco.internetbookstore.help.ConstantsForApp;
+import com.donteco.internetbookstore.constants.ConstantsForApp;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "shortened_book_description")
 public class ShortenedBookInfo
 {
@@ -90,5 +92,23 @@ public class ShortenedBookInfo
                 ", imageUrl='" + imageUrl + '\'' +
                 ", link='" + link + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShortenedBookInfo that = (ShortenedBookInfo) o;
+        return id == that.id &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(subtitle, that.subtitle) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(imageUrl, that.imageUrl) &&
+                Objects.equals(link, that.link);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, subtitle, id, price, imageUrl, link);
     }
 }

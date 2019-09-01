@@ -1,16 +1,14 @@
 package com.donteco.internetbookstore.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,33 +22,51 @@ import com.donteco.internetbookstore.books.CachedBook;
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.donteco.internetbookstore.dialogs.FullBookDescriptionDialog;
-import com.donteco.internetbookstore.help.ActivityHelper;
-import com.donteco.internetbookstore.help.ConstantsForApp;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.donteco.internetbookstore.request.RequestSender;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends BaseActivity
+{
     private ImageButton goToCart;
     private EditText searchBar;
     private ProgressBar loadingIndicator;
-
-    private RepositoryViewModel viewModel;
-
-    private RequestSender requestSender;
-    private int searchPageNumber;
-
     private String userInput;
 
+    private RepositoryViewModel viewModel;
+    private RequestSender requestSender;
     private ChooseBooksAdapter chooseBooksAdapter;
+
+    private BottomNavigationView bottomNavigationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        bottomNavigationBar = findViewById(R.id.bottom_navigation);
+        bottomNavigationBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.book_search_bottom_navigation:
+                        Toast.makeText(MainActivity.this, "Books search ", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.shopping_cart_bottom_navigation:
+                        Toast.makeText(MainActivity.this, "Shopping cart ", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+        getRidOfTopBar();
 
         goToCart = findViewById(R.id.show_cart_btn);
         goToCartLogic();
@@ -60,45 +76,44 @@ public class MainActivity extends AppCompatActivity {
 
         loadingIndicator = findViewById(R.id.main_activity_pb_loading_indicator);
 
-        ActivityHelper.getRidOfTopBar(this);
-
         setRecyclerView(findViewById(R.id.rv_books));
 
         searchBar = findViewById(R.id.book_search_bar);
         ImageView imageView = findViewById(R.id.book_search_iv);
         setSearchIVLogic(imageView);
 
-        requestSender = new RequestSender(new RequestSender.RequestCallBack() {
+        requestSender = new RequestSender(new RequestSender.RequestCallBack()
+        {
             @Override
-            public void onGetBooksResponse(List<ShortenedBookInfo> receivedShortenedBooksInfo) {
-                //chooseBooksAdapter.addBooks(receivedShortenedBooksInfo);
-                System.out.println("Got into ongetBooksResponce "+receivedShortenedBooksInfo.toString());
-                viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
-                viewModel.insertCachedBooksInfo(convertToCachedBooks(receivedShortenedBooksInfo));
+            public void onGetBooksResponse(List<ShortenedBookInfo> receivedShortenedBooksInfo)
+            {
+                if(noListInDB(receivedShortenedBooksInfo,
+                        chooseBooksAdapter.getBooks(),
+                        requestSender.getTotalNumberOfBooks() % 10))
+                {
+                    viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
+                    viewModel.insertCachedBooksInfo( convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
+                }
                 loadingIndicator.setVisibility(View.INVISIBLE);
             }
 
             @Override
-            public void onGetBookInfoResponse(FullBookInfo fullBookInfo) {
+            public void onGetBookInfoResponse(FullBookInfo fullBookInfo)
+            {
                 loadingIndicator.setVisibility(View.INVISIBLE);
+
+                viewModel.insertFullBookInfo(fullBookInfo);
+
                 FullBookDescriptionDialog dialog = new FullBookDescriptionDialog(MainActivity.this, fullBookInfo);
                 dialog.show();
             }
 
             @Override
             public void onNoBooksCondition() {
-                Toast.makeText(MainActivity.this, "No books added!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Sorry, no books found!", Toast.LENGTH_LONG).show();
             }
+
         });
-    }
-
-    private List<CachedBook> convertToCachedBooks(List<ShortenedBookInfo> receivedShortenedBooksInfo) {
-        List<CachedBook> result = new ArrayList<>();
-
-        for (ShortenedBookInfo shortenedBookInfo : receivedShortenedBooksInfo)
-               result.add(new CachedBook(userInput, shortenedBookInfo.getId()));
-
-        return result;
     }
 
     private void setSearchIVLogic(ImageView imageView) {
@@ -106,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
         {
             chooseBooksAdapter.clearList();
 
-            System.out.println("Got into search logic!");
-            searchPageNumber = 1;
             userInput = searchBar.getText().toString();
 
             if(isNetworkAvailable())
@@ -115,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
             viewModel.getBooksByUserRequest(userInput).observe(this, shortenedBookInfos ->
             {
-                System.out.println("Got into observer ");
                 chooseBooksAdapter.setBooks(shortenedBookInfos);
 
                 if(chooseBooksAdapter.getItemCount() == 0)
@@ -124,17 +136,18 @@ public class MainActivity extends AppCompatActivity {
                     loadingIndicator.setVisibility(View.INVISIBLE);
             });
         });
-
     }
 
-    private void goToCartLogic() {
+    private void goToCartLogic()
+    {
         goToCart.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ShoppingCartActivity.class);
             startActivity(intent);
         });
     }
 
-    private void setRecyclerView(RecyclerView recyclerView) {
+    private void setRecyclerView(RecyclerView recyclerView)
+    {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         chooseBooksAdapter = new ChooseBooksAdapter(new ChooseBooksAdapter.ChooseAdapterCallBack() {
@@ -144,38 +157,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void uploadAnotherPageOfBooks()
-            {
-                /*if (checkIfCanRequest())
-                {
-                    searchPageNumber++;
-                    loadingIndicator.setVisibility(View.VISIBLE);
-                    requestSender.sentGetBooksRequest(searchBar.getText().toString(), searchPageNumber);
-                }*/
-            }
-
-            @Override
             public void uploadFullBookInfo(long id) {
                 loadingIndicator.setVisibility(View.VISIBLE);
-                requestSender.sentGetFullBookInfo(id);
+                FullBookInfo fullBookInfo = viewModel.getFullBookInfoByRequest(id);
+
+                if(fullBookInfo == null)
+                    requestSender.sentGetFullBookInfo(id);
+                else
+                {
+                    FullBookDescriptionDialog dialog = new FullBookDescriptionDialog(MainActivity.this, fullBookInfo);
+                    dialog.show();
+                    loadingIndicator.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
         recyclerView.setAdapter(chooseBooksAdapter);
     }
 
-    private boolean checkIfCanRequest() {
-        System.out.println("Total amount of books " + requestSender.getTotalNumberOfBooks() + " SearchPage number " + searchPageNumber + " amount of books in adapter " + chooseBooksAdapter.getItemCount());
-        return (requestSender.getTotalNumberOfBooks() -
-                searchPageNumber * ConstantsForApp.AMOUNT_OF_BOOKS_PER_PAGE)
-                > -ConstantsForApp.AMOUNT_OF_BOOKS_PER_PAGE;
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 }

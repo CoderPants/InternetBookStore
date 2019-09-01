@@ -17,7 +17,7 @@ public interface CachedBookDao
     void insert(List<CachedBook> cachedBooks);
 
     @Insert (onConflict = REPLACE)
-    void insert(CachedBook cachedBook);
+    long insert(CachedBook cachedBook);
 
     @Query("DELETE FROM cached_books")
     void deleteAll();

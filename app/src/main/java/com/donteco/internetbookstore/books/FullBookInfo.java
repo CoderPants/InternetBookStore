@@ -15,7 +15,8 @@ public class FullBookInfo
     private String authors;
     private String publisher;
     private String language;
-    private long isbn10;
+    //'Cos there was some examples with strings
+    private String isbn10;
 
     @SerializedName("isbn13")
     @PrimaryKey
@@ -32,7 +33,7 @@ public class FullBookInfo
     private JsonObject pdf;
 
     public FullBookInfo(int error, String title, String subtitle, String authors, String publisher,
-                        String language, long isbn10, long id, int pages, int year, int rating,
+                        String language, String isbn10, long id, int pages, int year, int rating,
                         String description, String price, String image, String url, JsonObject pdf)
     {
         this.error = error;
@@ -102,11 +103,11 @@ public class FullBookInfo
         this.language = language;
     }
 
-    public long getIsbn10() {
+    public String getIsbn10() {
         return isbn10;
     }
 
-    public void setIsbn10(long isbn10) {
+    public void setIsbn10(String isbn10) {
         this.isbn10 = isbn10;
     }
 

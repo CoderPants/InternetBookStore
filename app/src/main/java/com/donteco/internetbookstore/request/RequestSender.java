@@ -1,17 +1,14 @@
 package com.donteco.internetbookstore.request;
 
-import android.os.Handler;
 import android.util.Log;
 
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
-import com.donteco.internetbookstore.help.ConstantsForApp;
+import com.donteco.internetbookstore.constants.ConstantsForApp;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,22 +43,8 @@ public class RequestSender {
                     System.out.println("Got into response!");
                     RequestBackground requestBackground = new RequestBackground
                             (userInput,RequestSender.this, totalNumberOfBooks);
+
                     requestBackground.startRequest();
-                    /*Timer timer = new Timer(true);
-
-                    TimerTask timerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            RequestBackground requestBackground = new RequestBackground
-                                    (userInput,
-                                            RequestSender.this,
-                                            timer::cancel,
-                                            totalNumberOfBooks);
-                            requestBackground.execute();
-                        }
-                    };
-
-                    timer.schedule(timerTask, 0,10000);*/
                 }
             }
 

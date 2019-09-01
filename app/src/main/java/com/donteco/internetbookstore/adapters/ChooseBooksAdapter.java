@@ -16,7 +16,6 @@ import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.ChooseBooksViewHolder>
@@ -31,7 +30,6 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
     }
 
     public void setBooks(List<ShortenedBookInfo> books) {
-        //this.books = new ArrayList<>(books);
         this.books = books;
         notifyDataSetChanged();
     }
@@ -46,10 +44,14 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
         notifyDataSetChanged();
     }
 
+    public List<ShortenedBookInfo> getBooks() {
+        return books;
+    }
+
     @NonNull
     @Override
-    public ChooseBooksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
+    public ChooseBooksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.main_activity_recycler_view_element, parent, false);
         return new ChooseBooksViewHolder(view);
@@ -58,10 +60,6 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
     @Override
     public void onBindViewHolder(@NonNull ChooseBooksViewHolder holder, int position) {
         holder.bind(books.get(position));
-
-        System.out.println("Books size " + books.size());
-        if(position == books.size()-1)
-            callBack.uploadAnotherPageOfBooks();
     }
 
     @Override
@@ -111,7 +109,6 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
     public interface ChooseAdapterCallBack
     {
         Drawable onNoIconCondition();
-        void uploadAnotherPageOfBooks();
         void uploadFullBookInfo(long id);
     }
 }

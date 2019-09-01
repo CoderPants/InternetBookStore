@@ -17,8 +17,12 @@ public class RepositoryViewModel extends AndroidViewModel
 {
     private Repository repository;
 
+    private Application application;
+
     public RepositoryViewModel(@NonNull Application application) {
         super(application);
+
+        this.application = application;
 
         repository = new Repository(application);
     }
@@ -35,11 +39,15 @@ public class RepositoryViewModel extends AndroidViewModel
         repository.insertFullBookInfo(fullBookInfo);
     }
 
-    public FullBookInfo getFullBookInfoByRequest(int id){
+    public FullBookInfo getFullBookInfoByRequest(long id){
         return repository.getFullBookInfo(id);
     }
 
     public LiveData< List<ShortenedBookInfo> > getBooksByUserRequest(String request) {
         return repository.getShortenedBooksInfoByRequest(request);
+    }
+
+    public interface CallBack {
+        void onGotFullBookInfo(FullBookInfo fullBookInfo);
     }
 }

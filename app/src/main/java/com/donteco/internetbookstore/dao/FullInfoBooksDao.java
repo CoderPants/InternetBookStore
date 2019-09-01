@@ -26,7 +26,7 @@ public interface FullInfoBooksDao
     void deleteFullBook(FullBookInfo entity);
 
     @Query("SELECT * FROM full_books_description WHERE id LIKE :id")
-    FullBookInfo getFullBookByRequest(int id);
+    FullBookInfo getFullBookByRequest(long id);
 
     @Query("SELECT * FROM full_books_description")
     LiveData< List<FullBookInfo> > getFullBooks();
