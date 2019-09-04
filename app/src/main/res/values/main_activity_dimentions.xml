@@ -22,4 +22,6 @@
     <dimen name="main_activity_ib_search_max_width">40dp</dimen>
     <dimen name="main_activity_ib_search_max_height">40dp</dimen>
 
+    <dimen name="possible_bottom_navigation_size">40dp</dimen>
+
 </resources>

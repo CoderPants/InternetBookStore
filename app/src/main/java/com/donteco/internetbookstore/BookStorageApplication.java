@@ -2,8 +2,7 @@ package com.donteco.internetbookstore;
 
 import android.app.Application;
 
-import com.donteco.internetbookstore.storage.Repository;
-import com.donteco.internetbookstore.storage.Storage;
+import com.donteco.internetbookstore.storage.ShoppingCart;
 //import com.facebook.stetho.Stetho;
 
 public class BookStorageApplication extends Application {
@@ -12,7 +11,7 @@ public class BookStorageApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Storage.createBooks();
+        ShoppingCart.createBooks();
 
         //Repository res = new Repository(this);
 

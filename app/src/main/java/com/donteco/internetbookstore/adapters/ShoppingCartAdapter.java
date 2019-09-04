@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
-import com.donteco.internetbookstore.storage.Storage;
+import com.donteco.internetbookstore.storage.ShoppingCart;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,9 +20,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 {
     private List<ShortenedBookInfo> shortenedBookInfos;
 
-    public ShoppingCartAdapter()
-    {
-        shortenedBookInfos = Storage.getCart();
+    public ShoppingCartAdapter() {
+        shortenedBookInfos = ShoppingCart.getCart();
     }
 
 

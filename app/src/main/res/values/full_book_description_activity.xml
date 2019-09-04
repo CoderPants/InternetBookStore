@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="full_book_description_activity_additional_info_text_size">13sp</dimen>
+    <dimen name="full_book_description_activity_additional_info_ll_width">150dp</dimen>
+    <dimen name="full_book_description_activity_iv_width">150dp</dimen>
+    <dimen name="full_book_description_iv_margin_from_borders">20dp</dimen>
+    <dimen name="full_book_description_iv_margin_from_additional_info">10dp</dimen>
+    <dimen name="full_book_description_info_ctl_height">300dp</dimen>
+    <dimen name="full_book_description_activity_additional_info_bottom_margin_between_containers">
+        10dp
+    </dimen>
+    <dimen name="full_book_description_activity_additional_info_bottom_margin_between_info">5dp
+    </dimen>
+    <dimen name="full_book_description_activity_nsv_ll_margin">10dp</dimen>
+    <dimen name="full_book_description_book_title_text_size">21sp</dimen>
+    <dimen name="full_book_description_book_author_text_size">15sp</dimen>
+    <dimen name="full_book_description_activity_bottom_border">2dp</dimen>
+    <dimen name="full_book_description_activity_tv_line_spacing_extra">8dp</dimen>
+</resources>

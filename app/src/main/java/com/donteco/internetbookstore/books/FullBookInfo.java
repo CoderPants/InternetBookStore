@@ -15,7 +15,7 @@ public class FullBookInfo
     private String authors;
     private String publisher;
     private String language;
-    //'Cos there was some examples with strings
+    //'Cos there were some examples with strings
     private String isbn10;
 
     @SerializedName("isbn13")

@@ -1,9 +1,10 @@
 <resources>
+    <integer name="com_vk_sdk_AppId">7107036</integer>
+
     <string name="app_name">Book Store</string>
-
     <string name="text_style">monospace</string>
-    <string name="search_bar_hint">Search</string>
 
+    <string name="search_bar_hint">Search</string>
     <string name="go_back">✖</string>
     <string name="apply_cart">Apply cart</string>
     <string name="sent_data">➤</string>
@@ -19,6 +20,21 @@
     <string name="preview">Preview</string>
     <string name="description">Description</string>
     <string name="publish_year">Publish year</string>
+    <string name="bottom_navigation_bar_book_search">Book Search</string>
 
-    <integer name="com_vk_sdk_AppId">7107036</integer>
+    <string name="bottom_navigation_bar_shopping_cart">Shopping cart</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="full_book_description_activity_pages">PAGES</string>
+    <string name="full_book_description_activity_published_year">PUBLISHED</string>
+    <string name="full_book_description_activity_rating">RATING</string>
+    <string name="full_book_description_activity_price">PRICE</string>
+    <string name="full_book_description_activity_language">LANGUAGE</string>
+    <string name="additional_info_subtitle">SUBTITLE</string>
+    <string name="additional_info_publishers">PUBLISHERS</string>
+    <string name="additional_info_isbn10">ISBN10</string>
+    <string name="additional_info_isbn13">ISBN13</string>
+    <string name="full_book_description_activity_details">Details</string>
 </resources>
