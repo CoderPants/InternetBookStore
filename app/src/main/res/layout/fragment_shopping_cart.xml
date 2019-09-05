@@ -4,48 +4,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/cart_activity_cancel_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/go_back"
-        android:textAlignment="center"
-        android:layout_marginStart="@dimen/cart_activity_btn_left_margin"
-        android:layout_marginTop="@dimen/cart_activity_btn_top_margin"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/search_bar_background"
-        />
-
     <TextView
-        android:id="@+id/cart_activity_tv_top"
+        android:id="@+id/cart_fragment_tv_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/apply_cart"
-        android:textSize="@dimen/cart_activity_tv_text_size"
-        android:layout_marginTop="@dimen/cart_activity_tv_top_margin"
-        android:fontFamily="@string/text_style"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/cart_activity_tv_top_margin"
+        android:text="@string/my_shopping_cart"
         android:textAlignment="center"
-        />
-
-    <Button
-        android:id="@+id/cart_activity_accept_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sent_data"
-        android:layout_marginEnd="@dimen/cart_activity_btn_right_margin"
-        android:layout_marginTop="@dimen/cart_activity_btn_top_margin"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/search_bar_background"
+        android:textSize="@dimen/cart_activity_tv_text_size"
+        android:textStyle="bold"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_activity_rv_chosen_books"
+        android:id="@+id/cart_fragment_rv_chosen_books"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cart_activity_cancel_btn"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cart_fragment_tv_top"
+        android:layout_above="@+id/cart_fragment_amount_of_cart"
         android:layout_marginTop="@dimen/cart_activity_rv_top_margin"
-        >
+        android:layout_marginBottom="@dimen/cart_fragment_rv_bottom_margin">
     </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/cart_fragment_amount_of_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/cart_fragment_ll_total_cart_value_margin_start"
+        android:layout_marginEnd="@dimen/cart_fragment_ll_total_cart_value_margin_start"
+        android:layout_marginBottom="@dimen/cart_fragment_ll_total_amount_bottom_margin"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/cart_fragment_subtotal_before_tax"
+            android:textSize="@dimen/cart_fragment_total_value_text_size"
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/full_book_description_activity_bottom_border"
+            android:background="@color/black95"
+            android:layout_marginBottom="@dimen/cart_fragment_view_total_amount_bottom_margin"
+            />
+
+        <TextView
+            android:id="@+id/cart_fragment_tv_for_total_price"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="35 $"
+            android:textSize="@dimen/cart_fragment_total_value_numerical_text_size"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/cart_fragment_tv_before_checkout_margin_bottom"
+            />
+
+        <Button
+            android:id="@+id/cart_fragment_checkout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cart_fragment_checkout"
+            android:textSize="21sp"
+            android:textColor="@color/appWhite"
+            android:background="@color/appDarkBlue"
+            />
+    </LinearLayout>
+
 
 </RelativeLayout>

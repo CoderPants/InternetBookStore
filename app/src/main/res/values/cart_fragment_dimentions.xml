@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cart_activity_btn_left_margin">10dp</dimen>
+    <dimen name="cart_activity_btn_top_margin">10dp</dimen>
+    <dimen name="cart_activity_btn_right_margin">10dp</dimen>
+
+    <dimen name="cart_activity_tv_top_margin">20dp</dimen>
+    <dimen name="cart_activity_tv_text_size">16sp</dimen>
+    <dimen name="cart_activity_rv_top_margin">20dp</dimen>
+    <dimen name="cart_fragment_view_total_amount_bottom_margin">5dp</dimen>
+
+    <dimen name="cart_fragment_rv_height">400dp</dimen>
+    <dimen name="cart_fragment_rv_bottom_margin">20dp</dimen>
+    <dimen name="cart_fragment_ll_total_cart_value_margin_start">20dp</dimen>
+    <dimen name="cart_fragment_total_value_text_size">16sp</dimen>
+    <dimen name="cart_fragment_total_value_numerical_text_size">20sp</dimen>
+    <dimen name="cart_fragment_tv_before_checkout_margin_bottom">20dp</dimen>
+    <dimen name="cart_fragment_ll_total_amount_bottom_margin">10dp</dimen>
+</resources>

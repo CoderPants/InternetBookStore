@@ -5,7 +5,7 @@
     <dimen name="full_book_description_activity_iv_width">150dp</dimen>
     <dimen name="full_book_description_iv_margin_from_borders">20dp</dimen>
     <dimen name="full_book_description_iv_margin_from_additional_info">10dp</dimen>
-    <dimen name="full_book_description_info_ctl_height">300dp</dimen>
+    <dimen name="full_book_description_info_ctl_height">350dp</dimen>
     <dimen name="full_book_description_activity_additional_info_bottom_margin_between_containers">
         10dp
     </dimen>
@@ -16,4 +16,5 @@
     <dimen name="full_book_description_book_author_text_size">15sp</dimen>
     <dimen name="full_book_description_activity_bottom_border">2dp</dimen>
     <dimen name="full_book_description_activity_tv_line_spacing_extra">8dp</dimen>
+    <dimen name="full_book_description_iv_go_back_margin">10dp</dimen>
 </resources>

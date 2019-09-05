@@ -7,15 +7,24 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
+import com.donteco.internetbookstore.models.RepositoryViewModel;
+import com.donteco.internetbookstore.storage.Storage;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 public class FullBookDescription extends BaseActivity {
@@ -35,6 +44,8 @@ public class FullBookDescription extends BaseActivity {
     private TextView isbn10;
     private TextView isbn13;
 
+    private RepositoryViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,6 +53,8 @@ public class FullBookDescription extends BaseActivity {
         setContentView(R.layout.activity_full_book_description);
 
         getRidOfTopBar();
+
+        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel.class);
 
         bookImage = findViewById(R.id.full_book_activity_iv_for_book_image);
         pageAmount = findViewById(R.id.full_book_description_activity_tv_amount_of_pages);
@@ -63,6 +76,30 @@ public class FullBookDescription extends BaseActivity {
                 PorterDuff.Mode.SRC_ATOP);
 
         fillActivity();
+
+        addToCartLogic( findViewById(R.id.full_book_description_fab_for_adding_to_cart) );
+        goBackLogic( findViewById(R.id.full_book_description_go_back) );
+    }
+
+    private void goBackLogic(RelativeLayout returnToMain) {
+        returnToMain.setOnClickListener(view ->
+                startActivity(new Intent(FullBookDescription.this, MainActivity.class)));
+    }
+
+    //Need to fix logic!!!
+    private void addToCartLogic(FloatingActionButton addToCartBtn)
+    {
+        addToCartBtn.setOnClickListener(view ->
+        {
+            long bookId = getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
+            try{
+                Storage.addToCart( viewModel.getShortenedBookInfo(bookId) );
+                Toast.makeText(getApplicationContext(), "Book successfully added to the cart!", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Something wrong, contact us.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fillActivity()
@@ -87,17 +124,11 @@ public class FullBookDescription extends BaseActivity {
         publishDate.setText( String.valueOf(intent.getIntExtra(IntentKeys.FULL_BOOK_YEAR, 0)) );
         ratingBar.setRating(intent.getIntExtra(IntentKeys.FULL_BOOK_RATING, 0));
 
-        String checker = intent.getStringExtra(IntentKeys.FULL_BOOK_PRICE).trim();
-        checker = (checker.length() == 0)? "none": checker;
-        price.setText(checker);
+        price.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_PRICE)) );
+        title.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_TITLE)) );
 
-        checker = intent.getStringExtra(IntentKeys.FULL_BOOK_TITLE).trim();
-        checker = (checker.length() == 0)? "none": checker;
-        title.setText(checker);
-
-        checker = intent.getStringExtra(IntentKeys.FULL_BOOK_AUTHORS).trim();
-        checker = (checker.length() == 0)? "none": "by " + checker;
-        author.setText(checker);
+        String checker = checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_AUTHORS));
+        author.setText( checker.equals("none")? checker: "by " + checker);
 
         checker = intent.getStringExtra(IntentKeys.FULL_BOOK_DESCRIPTION).trim();
 
@@ -113,24 +144,18 @@ public class FullBookDescription extends BaseActivity {
             description.setText(Html.fromHtml(descriptionLink.toString()));
         }
         else
-        {
-            checker = "none";
-            description.setText(checker);
-        }
+            description.setText("none");
 
-        checker = intent.getStringExtra(IntentKeys.FULL_BOOK_LANGUAGE).trim();
-        checker = (checker.length() == 0)? "none": "by " + checker;
+        language.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_LANGUAGE)) );
+        subtitle.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_SUBTITLE)) );
+        publishers.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_PUBLISHERS)) );
+        isbn10.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_ISBN10)) );
 
-        language.setText(intent.getStringExtra(IntentKeys.FULL_BOOK_LANGUAGE));
-
-        subtitle.setText(intent.getStringExtra(IntentKeys.FULL_BOOK_SUBTITLE));
-        System.out.println("Subtitle in intent " + intent.getStringExtra(IntentKeys.FULL_BOOK_SUBTITLE));
-        publishers.setText(intent.getStringExtra(IntentKeys.FULL_BOOK_PUBLISHERS));
-        isbn10.setText(intent.getStringExtra(IntentKeys.FULL_BOOK_ISBN10));
         isbn13.setText(String.valueOf( intent.getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0)) );
     }
 
-    private String checkFroEmptyAnswer(String bookInfo){
-        return null;
+    private String checkFroEmptyAnswer(@NonNull String bookInfo) {
+        return (bookInfo.trim().length() == 0)? "none": bookInfo;
     }
+
 }

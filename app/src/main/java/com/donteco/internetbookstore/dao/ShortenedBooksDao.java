@@ -35,13 +35,13 @@ public interface ShortenedBooksDao {
             "WHERE cached_books.userRequest LIKE :userRequest ")
     LiveData<List<ShortenedBookInfo>> getShortenedBooksByRequest(String userRequest);
 
-
-    @Query("SELECT shortened_book_description.* FROM shortened_book_description where id IN " +
-            "(SELECT id FROM cached_books WHERE userRequest LIKE :userRequest )")
-    LiveData<List<ShortenedBookInfo>> getShortenedBooksByRequest2(String userRequest);
-
     @Query("SELECT * FROM shortened_book_description")
     LiveData<List<ShortenedBookInfo>> getShortenedBooks();
+
+    @Query("SELECT * " +
+            "FROM shortened_book_description " +
+            "WHERE id LIKE :id")
+    ShortenedBookInfo getBookById(long id);
 
 //    @Query("SELECT * FROM shortened_book_description")
 //    LiveData< List<ShortenedBookInfo> > getShortenedBooks();

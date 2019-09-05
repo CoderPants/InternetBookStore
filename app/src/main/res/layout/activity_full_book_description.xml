@@ -33,19 +33,17 @@
                 android:fitsSystemWindows="true">
 
                 <RelativeLayout
+                    android:id="@+id/full_book_description_go_back"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
-                    <TextView
-                        android:id="@+id/full_book_description_go_back_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:text="@string/go_back"
-                        android:textColor="@color/black"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:textSize="25sp"
-                        android:textAlignment="center"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="@dimen/full_book_description_iv_go_back_margin"
+                        android:layout_marginStart="@dimen/full_book_description_iv_go_back_margin"
+                        android:src="@drawable/ic_arrow_back_black_24dp"
                         />
 
                     <TextView
@@ -53,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/full_book_description_activity_details"
                         android:textSize="@dimen/full_book_description_activity_details"
+                        android:layout_marginTop="@dimen/full_book_description_iv_go_back_margin"
                         android:layout_centerInParent="true"
                         />
 
@@ -182,7 +181,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/full_book_description_fab_fro_adding_to_cart"
+        android:id="@+id/full_book_description_fab_for_adding_to_cart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

@@ -13,8 +13,7 @@ import com.donteco.internetbookstore.storage.Repository;
 
 import java.util.List;
 
-public class RepositoryViewModel extends AndroidViewModel
-{
+public class RepositoryViewModel extends AndroidViewModel {
     private Repository repository;
 
     private Application application;
@@ -27,23 +26,27 @@ public class RepositoryViewModel extends AndroidViewModel
         repository = new Repository(application);
     }
 
-    public void insertShortenedBooksInfo(List<ShortenedBookInfo> books){
+    public void insertShortenedBooksInfo(List<ShortenedBookInfo> books) {
         repository.insertShortenedBooksInfo(books);
     }
 
-    public void insertCachedBooksInfo(List<CachedBook> books){
+    public void insertCachedBooksInfo(List<CachedBook> books) {
         repository.insertCachedBooksInfo(books);
     }
 
-    public void insertFullBookInfo(FullBookInfo fullBookInfo){
+    public void insertFullBookInfo(FullBookInfo fullBookInfo) {
         repository.insertFullBookInfo(fullBookInfo);
     }
 
-    public FullBookInfo getFullBookInfoByRequest(long id){
+    public FullBookInfo getFullBookInfoByRequest(long id) {
         return repository.getFullBookInfo(id);
     }
 
-    public LiveData< List<ShortenedBookInfo> > getBooksByUserRequest(String request) {
+    public ShortenedBookInfo getShortenedBookInfo(long id) {
+        return repository.getShortenedBookInfo(id);
+    }
+
+    public LiveData<List<ShortenedBookInfo>> getBooksByUserRequest(String request) {
         return repository.getShortenedBooksInfoByRequest(request);
     }
 

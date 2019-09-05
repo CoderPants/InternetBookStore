@@ -2,6 +2,7 @@ package com.donteco.internetbookstore.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.helper.SearchBooksHelper;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.donteco.internetbookstore.request.RequestSender;
+import com.donteco.internetbookstore.storage.Storage;
 
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class SearchBooksFragment extends Fragment
     //Fields for single creation
     private Activity activity;
     private String userInput;
+    private EditText searchBar;
 
     private ProgressBar loadingIndicator;
 
@@ -70,12 +73,13 @@ public class SearchBooksFragment extends Fragment
 
         requestSenderCreation();
 
-        searchBooksBtnLogic(view.findViewById(R.id.book_search_iv), view.findViewById(R.id.book_search_bar));
+        searchBar = view.findViewById(R.id.book_search_bar);
+        searchBooksBtnLogic(view.findViewById(R.id.book_search_iv));
 
         recyclerViewCreation(view.findViewById(R.id.rv_books));
     }
 
-    private void searchBooksBtnLogic(ImageView imageView, EditText searchBar) {
+    private void searchBooksBtnLogic(ImageView imageView) {
         imageView.setOnClickListener(view ->
         {
             adapter.clearList();
@@ -186,7 +190,36 @@ public class SearchBooksFragment extends Fragment
         intent.putExtra(IntentKeys.FULL_BOOK_URL, fullBookInfo.getUrl());
         intent.putExtra(IntentKeys.FULL_BOOK_LANGUAGE, fullBookInfo.getLanguage());
 
-
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume()
+    {
+        userInput = Storage.getUserInput();
+        searchBar.setText(userInput);
+
+        viewModel.getBooksByUserRequest(userInput).observe(SearchBooksFragment.this, shortenedBookInfos ->
+                adapter.setBooks(shortenedBookInfos));
+
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Storage.setUserInput(searchBar.getText().toString());
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        Storage.setUserInput(searchBar.getText().toString());
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Storage.setUserInput(searchBar.getText().toString());
+        super.onDestroyView();
     }
 }

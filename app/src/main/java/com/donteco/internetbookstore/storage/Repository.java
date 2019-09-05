@@ -56,7 +56,22 @@ public class Repository
         try {
             return asyncTask.get();
         } catch (ExecutionException | InterruptedException e) {
-            Log.e(ConstantsForApp.LOG_TAG, "Caught exception in getFullBoonInfo " + e);
+            Log.e(ConstantsForApp.LOG_TAG,
+                    "Caught exception in getFullBoonInfo. Caused by getting info from db. Exception " + e);
+        }
+        return null;
+    }
+
+    public ShortenedBookInfo getShortenedBookInfo(long id)
+    {
+        GetShortenedInfoAsyncTask asyncTask = new GetShortenedInfoAsyncTask(shortenedBooksDao);
+        asyncTask.execute(id);
+
+        try {
+            return asyncTask.get();
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e(ConstantsForApp.LOG_TAG,
+                    "Caught exception in getShortenedBoonInfo. Caused by getting info from db. Exception " + e);
         }
         return null;
     }
@@ -73,6 +88,17 @@ public class Repository
         protected FullBookInfo doInBackground(Long... longs) {
             return dao.getFullBookByRequest(longs[0]);
         }
+    }
 
+    private static class GetShortenedInfoAsyncTask extends AsyncTask<Long, Void, ShortenedBookInfo>
+    {
+        private ShortenedBooksDao dao;
+
+        private GetShortenedInfoAsyncTask(ShortenedBooksDao dao){ this.dao = dao;}
+
+        @Override
+        protected ShortenedBookInfo doInBackground(Long... longs) {
+            return dao.getBookById(longs[0]);
+        }
     }
 }

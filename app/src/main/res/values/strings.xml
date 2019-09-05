@@ -6,7 +6,7 @@
 
     <string name="search_bar_hint">Search</string>
     <string name="go_back">✖</string>
-    <string name="apply_cart">Apply cart</string>
+    <string name="my_shopping_cart">My Shopping Cart</string>
     <string name="sent_data">➤</string>
     <string name="book_price">Price</string>
     <string name="book_rating">Rating</string>
@@ -37,4 +37,6 @@
     <string name="additional_info_isbn10">ISBN10</string>
     <string name="additional_info_isbn13">ISBN13</string>
     <string name="full_book_description_activity_details">Details</string>
+    <string name="cart_fragment_subtotal_before_tax">Subtotal (before tax)</string>
+    <string name="cart_fragment_checkout">CHECKOUT</string>
 </resources>

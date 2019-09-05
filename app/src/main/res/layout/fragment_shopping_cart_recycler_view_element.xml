@@ -69,20 +69,39 @@
                 android:text="35$"/>
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/shopping_cart_delete_from_cart_bnt"
-            android:layout_width="@dimen/main_element_add_to_cart_btn_max_height"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/main_element_iv_margin_end"
             android:layout_weight="1"
-            android:background="@drawable/cart_activity_delete_book_btn_background"
-            android:scaleType="fitXY"
-            android:text="@string/go_back"
-            android:textAlignment="center"
-            android:textSize="30sp" />
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
 
+            <ImageView
+                android:id="@+id/shopping_cart_add_book_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_plus_in_box_black_24dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/cart_fragment_number_picker_magrin_bottom"/>
+
+            <TextView
+                android:id="@+id/shopping_cart_tv_amount_of_books"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="@dimen/cart_fragment_number_picker_text"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/cart_fragment_number_picker_magrin_bottom"/>
+
+            <ImageView
+                android:id="@+id/shopping_cart_delete_book_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_minus_in_box_black_24dp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
     </LinearLayout>
     <View
         android:id="@+id/shopping_cart_bottom_border"

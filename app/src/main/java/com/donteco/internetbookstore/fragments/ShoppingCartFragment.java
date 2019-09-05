@@ -41,7 +41,7 @@ public class ShoppingCartFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setRecyclerView(view.findViewById(R.id.cart_activity_rv_chosen_books));
+        setRecyclerView(view.findViewById(R.id.cart_fragment_rv_chosen_books));
     }
 
     private void setRecyclerView(RecyclerView recyclerView)

@@ -10,4 +10,12 @@
     <color name="black">#000</color>
     <color name="black95">#95000000</color>
     <color name="black85">#85000000</color>
+
+    <!--    App colors-->
+
+    <color name="appBlack">#191d24</color>
+    <color name="appBlue">#43a9d8</color>
+    <color name="appDarkBlue">#2f7ba2</color>
+    <color name="appWhite">#d4e1e4</color>
+    <color name="appGray">#707376</color>
 </resources>
