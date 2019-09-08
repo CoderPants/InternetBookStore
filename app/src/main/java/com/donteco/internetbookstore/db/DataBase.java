@@ -7,22 +7,26 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.books.CachedBook;
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.donteco.internetbookstore.converters.FullBookInfoTypeConverter;
+import com.donteco.internetbookstore.dao.BookInCartDao;
 import com.donteco.internetbookstore.dao.CachedBookDao;
 import com.donteco.internetbookstore.dao.FullInfoBooksDao;
 import com.donteco.internetbookstore.dao.ShortenedBooksDao;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 
-@Database(entities = {ShortenedBookInfo.class, CachedBook.class, FullBookInfo.class}, version = 1)
+@Database(entities = {ShortenedBookInfo.class, CachedBook.class, FullBookInfo.class, BookInCart.class}, version = 1)
 
 @TypeConverters({FullBookInfoTypeConverter.class})
-public abstract class DataBase extends RoomDatabase {
+public abstract class DataBase extends RoomDatabase
+{
     public abstract ShortenedBooksDao shortenedBooksDao();
     public abstract FullInfoBooksDao fullInfoBooksDao();
     public abstract CachedBookDao cachedBookDao();
+    public abstract BookInCartDao bookInCartDao();
 
     private static volatile DataBase INSTANCE;
 

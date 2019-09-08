@@ -16,7 +16,6 @@ public class Storage {
     private static android.content.SharedPreferences sharedPreferences;
     private static Storage storage;
 
-    private static List<ShortenedBookInfo> booksInCart;
     private static String userInput;
 
     private Storage(Context context) {
@@ -29,16 +28,16 @@ public class Storage {
     }
 
     public static void pushAllToStorage(){
-        pushCartToStorage();
+        //pushCartToStorage();
         pushUserInputToStorage();
     }
 
     public static void pullAllFromStorage(){
-        pullCartFromStorage();
+        //pullCartFromStorage();
         pullUserInputFormStorage();
     }
 
-    //----------------------------------------------------------------------------------------------
+   /* //----------------------------------------------------------------------------------------------
    public static void addToCart(ShortenedBookInfo shortenedBookInfo)
    {
        if(booksInCart == null)
@@ -76,7 +75,7 @@ public class Storage {
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(ConstantsForApp.KEY_FOR_STORED_CART, jsonString);
         editor.apply();
-    }
+    }*/
 
     //----------------------------------------------------------------------------------------------
     public static String getUserInput() {
@@ -85,6 +84,7 @@ public class Storage {
 
     public static void setUserInput(String userInput) {
         Storage.userInput = userInput;
+        pushUserInputToStorage();
     }
 
     private static void pullUserInputFormStorage()
