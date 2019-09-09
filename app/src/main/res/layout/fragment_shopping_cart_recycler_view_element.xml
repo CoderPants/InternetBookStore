@@ -35,54 +35,77 @@
                 android:id="@+id/shopping_cart_book_title"
                 android:layout_width="@dimen/main_recycler_view_tv_max_width"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|start"
-                android:fontFamily="@string/text_style"
-                android:textSize="@dimen/main_recycler_view_element_tv_book_title_text_size"
-                android:textAlignment="textStart"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/shopping_cart_fragment_tv_author_text_size"
+                android:textAlignment="center"
                 android:textColor="@color/black95"
                 android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
                 android:text="Book title"
                 />
 
-            <TextView
-                android:id="@+id/shopping_cart_book_author"
-                android:layout_width="@dimen/main_recycler_view_tv_max_width"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|start"
-                android:fontFamily="@string/text_style"
-                android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
-                android:textAlignment="textStart"
-                android:textColor="@color/black95"
-                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
-                android:text="Author"/>
+                android:orientation="horizontal"
+                android:weightSum="5">
 
-            <TextView
-                android:id="@+id/shopping_cart_book_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|start"
-                android:fontFamily="@string/text_style"
-                android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
-                android:textAlignment="textStart"
-                android:textColor="@color/black95"
-                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
-                android:text="35$"/>
+
+                <ImageView
+                    android:id="@+id/shopping_cart_delete_book_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_minus_in_box_black_24dp"
+                    android:layout_weight="2" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/shopping_cart_book_amount_and_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/shopping_cart_fragment_tv_author_text_size"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/black95"
+                        android:text="Price x amount"/>
+
+                    <TextView
+                        android:id="@+id/shopping_cart_book_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/shopping_cart_fragment_tv_price_text_size"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/black95"
+                        android:text="35$" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/shopping_cart_add_book_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_plus_in_box_black_24dp"
+                    android:layout_weight="2" />
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/shopping_cart_add_book_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_plus_in_box_black_24dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/cart_fragment_number_picker_magrin_bottom"/>
+
 
             <TextView
                 android:id="@+id/shopping_cart_tv_amount_of_books"
@@ -94,14 +117,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/cart_fragment_number_picker_magrin_bottom"/>
 
-            <ImageView
-                android:id="@+id/shopping_cart_delete_book_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_minus_in_box_black_24dp"
-                android:layout_gravity="center_horizontal"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
     <View
         android:id="@+id/shopping_cart_bottom_border"

@@ -16,4 +16,6 @@
     <dimen name="cart_fragment_total_value_numerical_text_size">20sp</dimen>
     <dimen name="cart_fragment_tv_before_checkout_margin_bottom">20dp</dimen>
     <dimen name="cart_fragment_ll_total_amount_bottom_margin">10dp</dimen>
+    <dimen name="shopping_cart_fragment_tv_author_text_size">15sp</dimen>
+    <dimen name="shopping_cart_fragment_tv_price_text_size">17sp</dimen>
 </resources>

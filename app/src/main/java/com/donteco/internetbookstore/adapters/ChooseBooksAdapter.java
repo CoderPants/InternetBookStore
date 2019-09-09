@@ -41,6 +41,7 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
 
     public void clearList(){
         books.clear();
+
         notifyDataSetChanged();
     }
 

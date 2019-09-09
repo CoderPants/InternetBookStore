@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -118,14 +119,14 @@ public class FullBookDescription extends BaseActivity {
             {
                 viewModel.insertBookToCart( new BookInCart( bookId, bookTitle, bookPrice, 1, bookImage) );
 
-                Toast.makeText(getApplicationContext(), "Book successfully added to the cart!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Book was successfully added to the cart!", Toast.LENGTH_SHORT).show();
             }
             catch (Exception e)
             {
                 Log.e(ConstantsForApp.LOG_TAG,
                         "Exception in FullBookDescription activity in addToCartLogic, " +
                                 "caused by inserting data to db. Exception ", e);
-                Toast.makeText(getApplicationContext(), "Something wrong, contact us.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Something went wrong, contact us.", Toast.LENGTH_SHORT).show();
             }
 
             disableBtn(addToCartBtn);

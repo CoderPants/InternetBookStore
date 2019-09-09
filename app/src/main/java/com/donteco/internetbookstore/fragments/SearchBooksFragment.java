@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,13 +79,25 @@ public class SearchBooksFragment extends Fragment
         searchBooksBtnLogic(view.findViewById(R.id.book_search_iv));
 
         recyclerViewCreation(view.findViewById(R.id.rv_books));
+
+        setLiveDataObserver();
+    }
+
+    private void setLiveDataObserver(){
+        viewModel.getShortenedInfoBooks().observe(SearchBooksFragment.this, bookInfos ->
+        {
+            adapter.setBooks(bookInfos);
+
+            if(adapter.getItemCount() == 0)
+                loadingIndicator.setVisibility(View.VISIBLE);
+            else
+                loadingIndicator.setVisibility(View.INVISIBLE);
+        });
     }
 
     private void searchBooksBtnLogic(ImageView imageView) {
         imageView.setOnClickListener(view ->
         {
-            adapter.clearList();
-
             userInput = searchBar.getText().toString();
 
             //IF user didn't enter anything
@@ -93,15 +107,8 @@ public class SearchBooksFragment extends Fragment
             if(SearchBooksHelper.isNetworkAvailable(activity))
                 requestSender.sentGetTotalBooksAmount(userInput);
 
-            viewModel.getBooksByUserRequest(userInput).observe(SearchBooksFragment.this, shortenedBookInfos ->
-            {
-                adapter.setBooks(shortenedBookInfos);
-
-                if(adapter.getItemCount() == 0)
-                    loadingIndicator.setVisibility(View.VISIBLE);
-                else
-                    loadingIndicator.setVisibility(View.INVISIBLE);
-            });
+            //On changing this we change live recyclerView
+            viewModel.setuserInputLiveData(userInput);
         });
     }
 
@@ -116,7 +123,8 @@ public class SearchBooksFragment extends Fragment
                         requestSender.getTotalNumberOfBooks() % 10))
                 {
                     viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
-                    viewModel.insertCachedBooksInfo( SearchBooksHelper.convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
+                    viewModel.insertCachedBooksInfo(
+                            SearchBooksHelper.convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
                 }
                 loadingIndicator.setVisibility(View.INVISIBLE);
             }
@@ -125,12 +133,8 @@ public class SearchBooksFragment extends Fragment
             public void onGetBookInfoResponse(FullBookInfo fullBookInfo)
             {
                 loadingIndicator.setVisibility(View.INVISIBLE);
-
                 viewModel.insertFullBookInfo(fullBookInfo);
-
                 startFullDescriptionActivity(fullBookInfo);
-                /*FullBookDescriptionDialog dialog = new FullBookDescriptionDialog(activity, fullBookInfo);
-                dialog.show();*/
             }
 
             @Override
@@ -155,17 +159,17 @@ public class SearchBooksFragment extends Fragment
             @Override
             public void uploadFullBookInfo(long id) {
                 loadingIndicator.setVisibility(View.VISIBLE);
-                FullBookInfo fullBookInfo = viewModel.getFullBookInfoByRequest(id);
 
-                if(fullBookInfo == null)
-                    requestSender.sentGetFullBookInfo(id);
-                else
+                viewModel.getFullBookInfoById(id).observe(SearchBooksFragment.this, fullBookInfo ->
                 {
-                    loadingIndicator.setVisibility(View.INVISIBLE);
-                    startFullDescriptionActivity(fullBookInfo);
-                    /*FullBookDescriptionDialog dialog = new FullBookDescriptionDialog(activity, fullBookInfo);
-                    dialog.show();*/
-                }
+                    if(fullBookInfo == null)
+                        requestSender.sentGetFullBookInfo(id);
+                    else
+                    {
+                        loadingIndicator.setVisibility(View.INVISIBLE);
+                        startFullDescriptionActivity(fullBookInfo);
+                    }
+                });
             }
         });
 
@@ -199,8 +203,14 @@ public class SearchBooksFragment extends Fragment
         userInput = Storage.getUserInput();
         searchBar.setText(userInput);
 
-        viewModel.getBooksByUserRequest(userInput).observe(SearchBooksFragment.this, shortenedBookInfos ->
-                adapter.setBooks(shortenedBookInfos));
+        if(userInput.length() != 0)
+        {
+            viewModel.setuserInputLiveData(userInput);
+            setLiveDataObserver();
+        }
+
+        /*viewModel.getBooksByUserRequest(userInput).observe(SearchBooksFragment.this, shortenedBookInfos ->
+                adapter.setBooks(shortenedBookInfos));*/
 
         super.onResume();
     }

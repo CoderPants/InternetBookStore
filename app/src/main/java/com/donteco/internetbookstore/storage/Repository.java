@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.books.CachedBook;
@@ -27,13 +28,27 @@ public class Repository
     private CachedBookDao cachedBookDao;
     private BookInCartDao bookInCartDao;
 
-    public Repository(Application application)
+    private static Repository repository;
+
+    private Repository(Application application)
     {
         DataBase dataBase = DataBase.getDataBase(application);
         shortenedBooksDao = dataBase.shortenedBooksDao();
         fullInfoBooksDao = dataBase.fullInfoBooksDao();
         cachedBookDao = dataBase.cachedBookDao();
         bookInCartDao = dataBase.bookInCartDao();
+    }
+
+    public static Repository getInstance(Application application){
+        if(repository == null)
+            synchronized (Repository.class)
+            {
+                if(repository == null)
+                    repository = new Repository(application);
+
+            }
+
+        return repository;
     }
 
     public void insertShortenedBooksInfo(List<ShortenedBookInfo> books){
@@ -85,6 +100,10 @@ public class Repository
         return shortenedBooksDao.getShortenedBooksByRequest("%"+request+"%");
     }
 
+    public LiveData<FullBookInfo> getFullBookInfoById(long id){
+        return fullInfoBooksDao.getFullBookInfoById(id);
+    }
+
     public FullBookInfo getFullBookInfo(long id)
     {
         GetFullInfoAsyncTask asyncTask = new GetFullInfoAsyncTask(fullInfoBooksDao);
@@ -109,22 +128,6 @@ public class Repository
         @Override
         protected FullBookInfo doInBackground(Long... longs) {
             return dao.getFullBookByRequest(longs[0]);
-        }
-    }
-
-
-    private static class GetBookInCartAsyncTask extends AsyncTask<Long, Void, BookInCart>
-    {
-        private BookInCartDao dao;
-
-        public GetBookInCartAsyncTask(BookInCartDao dao) {
-            this.dao = dao;
-        }
-
-        @Override
-        protected BookInCart doInBackground(Long... longs) {
-            System.out.println("Book id db " + longs[0]);
-            return null;//dao.getBookInCartById(longs[0]);
         }
     }
 }

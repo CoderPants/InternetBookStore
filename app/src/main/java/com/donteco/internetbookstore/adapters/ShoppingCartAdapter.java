@@ -65,11 +65,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     {
         private ImageView bookImage;
         private TextView bookTitle;
-        private TextView bookAuthor;
         private TextView bookPrice;
 
         private ImageView addOneMoreBook;
-        private TextView amountOfBooks;
+        private TextView amountOfBooksAndPrice;
         private ImageView deleteOneBook;
 
         public ShopCartViewHolder(@NonNull View itemView) {
@@ -77,11 +76,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
             bookImage = itemView.findViewById(R.id.shopping_cart_element_iv_book_icon);
             bookTitle = itemView.findViewById(R.id.shopping_cart_book_title);
-            bookAuthor = itemView.findViewById(R.id.shopping_cart_book_author);
             bookPrice = itemView.findViewById(R.id.shopping_cart_book_price);
 
             addOneMoreBook = itemView.findViewById(R.id.shopping_cart_add_book_btn);
-            amountOfBooks = itemView.findViewById(R.id.shopping_cart_tv_amount_of_books);
+            amountOfBooksAndPrice = itemView.findViewById(R.id.shopping_cart_book_amount_and_price);
             deleteOneBook = itemView.findViewById(R.id.shopping_cart_delete_book_btn);
         }
 
@@ -94,7 +92,9 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
             bookTitle.setText(bookInCart.getTitle());
             //bookAuthor.setText(shortenedBookInfo.getSubtitle());
-            amountOfBooks.setText(String.valueOf(bookInCart.getAmount()));
+            /*String textForTv = bookInCart.getAmount() + " X " + bookInCart.getPrice();
+            amountOfBooksAndPrice.setText(textForTv);*/
+            setPriceAndAmount(bookInCart);
 
             String bookValue =  bookInCart.getTotalPrice() + "$";
             bookPrice.setText(bookValue);
@@ -112,7 +112,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 if(amount > 0)
                 {
                     bookInCart.setAmount(amount);
-                    amountOfBooks.setText(String.valueOf(amount));
+                    setPriceAndAmount(bookInCart);
+                    //amountOfBooks.setText(String.valueOf(amount));
                     setBookPrice(bookInCart);
                     callBack.updateBookInCartInfo(bookInCart);
                 }
@@ -125,7 +126,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             {
                 int amount = bookInCart.getAmount()+1;
                 bookInCart.setAmount(amount);
-                amountOfBooks.setText(String.valueOf(amount));
+                setPriceAndAmount(bookInCart);
+                //amountOfBooks.setText(String.valueOf(amount));
                 setBookPrice(bookInCart);
                 callBack.updateBookInCartInfo(bookInCart);
             });
@@ -134,6 +136,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         private void setBookPrice(BookInCart bookInCart){
             String bookValue =  bookInCart.getTotalPrice() + "$";
             bookPrice.setText(bookValue);
+        }
+
+        private void setPriceAndAmount(BookInCart bookInCart){
+            String textForTv = bookInCart.getAmount() + " X " + bookInCart.getPrice();
+            amountOfBooksAndPrice.setText(textForTv);
         }
     }
 

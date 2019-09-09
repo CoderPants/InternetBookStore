@@ -22,6 +22,9 @@ public interface FullInfoBooksDao
     @Query("SELECT * FROM full_books_description WHERE id LIKE :id")
     FullBookInfo getFullBookByRequest(long id);
 
+    @Query("SELECT * FROM full_books_description WHERE id LIKE :id")
+    LiveData<FullBookInfo> getFullBookInfoById(long id);
+
     @Query("SELECT * FROM full_books_description")
     LiveData< List<FullBookInfo> > getFullBooks();
 }
