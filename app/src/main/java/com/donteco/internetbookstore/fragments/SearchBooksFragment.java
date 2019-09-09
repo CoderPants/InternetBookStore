@@ -99,6 +99,7 @@ public class SearchBooksFragment extends Fragment
         imageView.setOnClickListener(view ->
         {
             userInput = searchBar.getText().toString();
+            requestSender.stopRequesting();
 
             //IF user didn't enter anything
             if(userInput.trim().length() == 0)

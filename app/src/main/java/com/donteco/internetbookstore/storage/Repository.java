@@ -47,7 +47,6 @@ public class Repository
                     repository = new Repository(application);
 
             }
-
         return repository;
     }
 
