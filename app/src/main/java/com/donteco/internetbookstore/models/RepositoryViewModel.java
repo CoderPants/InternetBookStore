@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.books.CachedBook;
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
@@ -42,15 +43,34 @@ public class RepositoryViewModel extends AndroidViewModel {
         return repository.getFullBookInfo(id);
     }
 
-    public ShortenedBookInfo getShortenedBookInfo(long id) {
-        return repository.getShortenedBookInfo(id);
-    }
-
     public LiveData<List<ShortenedBookInfo>> getBooksByUserRequest(String request) {
         return repository.getShortenedBooksInfoByRequest(request);
     }
 
-    public interface CallBack {
-        void onGotFullBookInfo(FullBookInfo fullBookInfo);
+    public void insertBookToCart(BookInCart bookInCart){
+        repository.insertBookInCartInfo(bookInCart);
     }
+
+    public void updateBookInCart(BookInCart bookInCart){
+        repository.updateBookInCartInfo(bookInCart);
+    }
+
+    public void deleteBookInCart(BookInCart bookInCart){
+        repository.deleteBookInCart(bookInCart);
+    }
+
+    /*public boolean isBookInCart(long id){
+        System.out.println("Book in db " + repository.getBookInCartById(id));
+        return repository.getBookInCartById(id) != null;
+    }*/
+
+    public LiveData<BookInCart> getBookInCartById(long id){
+        return repository.getBookInCartById(id);
+    }
+
+    public LiveData<List<BookInCart>> getCart(){
+        return repository.getCart();
+    }
+
+
 }

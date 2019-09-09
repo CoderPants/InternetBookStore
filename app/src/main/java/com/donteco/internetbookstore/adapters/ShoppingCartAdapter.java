@@ -1,6 +1,5 @@
 package com.donteco.internetbookstore.adapters;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +10,38 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.internetbookstore.R;
-import com.donteco.internetbookstore.books.ShortenedBookInfo;
-import com.donteco.internetbookstore.storage.Storage;
+import com.donteco.internetbookstore.books.BookInCart;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ShopCartViewHolder>
 {
-    private List<ShortenedBookInfo> shortenedBookInfos;
+    private List<BookInCart> shoppingCart;
+    private CallBack callBack;
 
-    public ShoppingCartAdapter() {
-        shortenedBookInfos = Storage.getBooksInCart();
+    public ShoppingCartAdapter(CallBack callBack) {
+        shoppingCart = new ArrayList<>();
+        this.callBack = callBack;
+        //shoppingCart = Storage.getBooksInCart();
     }
 
+    public List<BookInCart> getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(List<BookInCart> shoppingCart) {
+        this.shoppingCart = shoppingCart;
+        notifyDataSetChanged();
+    }
+
+    public void deleteBook(int position)
+    {
+        callBack.deleteBookInCart(shoppingCart.get(position));
+        shoppingCart.remove(position);
+        notifyItemRemoved(position);
+    }
 
     @NonNull
     @Override
@@ -36,12 +53,12 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ShopCartViewHolder holder, int position) {
-        holder.bind(shortenedBookInfos.get(position));
+        holder.bind(shoppingCart.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return shortenedBookInfos.size();
+        return shoppingCart.size();
     }
 
     public class ShopCartViewHolder extends RecyclerView.ViewHolder
@@ -68,38 +85,60 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             deleteOneBook = itemView.findViewById(R.id.shopping_cart_delete_book_btn);
         }
 
-        public void bind(ShortenedBookInfo shortenedBookInfo)
+        public void bind(BookInCart bookInCart)
         {
-            if(shortenedBookInfo.getImageUrl() != null)
+            if(bookInCart.getImageUrl() != null)
                 Picasso.get()
-                        .load(shortenedBookInfo.getImageUrl())
+                        .load(bookInCart.getImageUrl())
                         .into(bookImage);
 
-            bookTitle.setText(shortenedBookInfo.getTitle());
-            bookAuthor.setText(shortenedBookInfo.getSubtitle());
-            bookPrice.setText(shortenedBookInfo.getPrice());
+            bookTitle.setText(bookInCart.getTitle());
+            //bookAuthor.setText(shortenedBookInfo.getSubtitle());
+            amountOfBooks.setText(String.valueOf(bookInCart.getAmount()));
 
-            addOneBookLogic(shortenedBookInfo);
-            deleteOneBookLogic(shortenedBookInfo);
+            String bookValue =  bookInCart.getTotalPrice() + "$";
+            bookPrice.setText(bookValue);
+
+            addOneBookLogic(bookInCart);
+            deleteOneBookLogic(bookInCart);
         }
 
-        private void deleteOneBookLogic(ShortenedBookInfo shortenedBookInfo) {
+        private void deleteOneBookLogic(BookInCart bookInCart)
+        {
             deleteOneBook.setOnClickListener(view ->
             {
-                int curAmountOfBooks = Integer.valueOf(amountOfBooks.getText().toString()) - 1;
-                String price = shortenedBookInfo.getPrice();
-                int curPrice = Integer.valueOf( price.substring(0, price.indexOf(" ")) ) * curAmountOfBooks;
-                amountOfBooks.setText(String.valueOf(curAmountOfBooks));
-                bookPrice.setText(String.valueOf(curPrice));
+                int amount = bookInCart.getAmount()-1;
+
+                if(amount > 0)
+                {
+                    bookInCart.setAmount(amount);
+                    amountOfBooks.setText(String.valueOf(amount));
+                    setBookPrice(bookInCart);
+                    callBack.updateBookInCartInfo(bookInCart);
+                }
             });
         }
 
-        private void addOneBookLogic(ShortenedBookInfo shortenedBookInfo) {
-
+        private void addOneBookLogic(BookInCart bookInCart)
+        {
+            addOneMoreBook.setOnClickListener(view ->
+            {
+                int amount = bookInCart.getAmount()+1;
+                bookInCart.setAmount(amount);
+                amountOfBooks.setText(String.valueOf(amount));
+                setBookPrice(bookInCart);
+                callBack.updateBookInCartInfo(bookInCart);
+            });
         }
 
-        private void setBookPrice(ShortenedBookInfo shortenedBookInfo){
-
+        private void setBookPrice(BookInCart bookInCart){
+            String bookValue =  bookInCart.getTotalPrice() + "$";
+            bookPrice.setText(bookValue);
         }
+    }
+
+    public interface CallBack{
+        void updateBookInCartInfo(BookInCart bookInCart);
+        void deleteBookInCart(BookInCart bookInCart);
     }
 }

@@ -6,9 +6,11 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.books.CachedBook;
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
+import com.donteco.internetbookstore.dao.BookInCartDao;
 import com.donteco.internetbookstore.dao.CachedBookDao;
 import com.donteco.internetbookstore.dao.FullInfoBooksDao;
 import com.donteco.internetbookstore.dao.ShortenedBooksDao;
@@ -23,6 +25,7 @@ public class Repository
     private ShortenedBooksDao shortenedBooksDao;
     private FullInfoBooksDao fullInfoBooksDao;
     private CachedBookDao cachedBookDao;
+    private BookInCartDao bookInCartDao;
 
     public Repository(Application application)
     {
@@ -30,7 +33,7 @@ public class Repository
         shortenedBooksDao = dataBase.shortenedBooksDao();
         fullInfoBooksDao = dataBase.fullInfoBooksDao();
         cachedBookDao = dataBase.cachedBookDao();
-
+        bookInCartDao = dataBase.bookInCartDao();
     }
 
     public void insertShortenedBooksInfo(List<ShortenedBookInfo> books){
@@ -43,6 +46,39 @@ public class Repository
 
     public void insertCachedBooksInfo(List<CachedBook> cachedBooks) {
         new Thread(() -> cachedBookDao.insert(cachedBooks)).start();
+    }
+
+    public void insertBookInCartInfo(BookInCart bookInCart){
+        new Thread(() -> bookInCartDao.insert(bookInCart)).start();
+    }
+
+    public void updateBookInCartInfo(BookInCart bookInCart){
+        new Thread(() -> bookInCartDao.update(bookInCart)).start();
+    }
+
+    public void deleteBookInCart(BookInCart bookInCart){
+        new Thread(() -> bookInCartDao.delete(bookInCart)).start();
+    }
+
+    /*public BookInCart getBookInCartById(long id){
+        GetBookInCartAsyncTask asyncTask = new GetBookInCartAsyncTask(bookInCartDao);
+        asyncTask.execute(id);
+
+        try {
+            return asyncTask.get();
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e(ConstantsForApp.LOG_TAG,
+                    "Caught exception in getBookInCartById. Caused by getting info from db. Exception " + e);
+        }
+        return null;
+    }*/
+
+    public LiveData<List<BookInCart>> getCart(){
+        return bookInCartDao.getCart();
+    }
+
+    public LiveData<BookInCart> getBookInCartById(long id){
+        return bookInCartDao.getBookInCartById(id);
     }
 
     public LiveData<List<ShortenedBookInfo>> getShortenedBooksInfoByRequest(String request){
@@ -62,20 +98,6 @@ public class Repository
         return null;
     }
 
-    public ShortenedBookInfo getShortenedBookInfo(long id)
-    {
-        GetShortenedInfoAsyncTask asyncTask = new GetShortenedInfoAsyncTask(shortenedBooksDao);
-        asyncTask.execute(id);
-
-        try {
-            return asyncTask.get();
-        } catch (ExecutionException | InterruptedException e) {
-            Log.e(ConstantsForApp.LOG_TAG,
-                    "Caught exception in getShortenedBoonInfo. Caused by getting info from db. Exception " + e);
-        }
-        return null;
-    }
-
     private static class GetFullInfoAsyncTask extends AsyncTask<Long, Void, FullBookInfo>
     {
         private FullInfoBooksDao dao;
@@ -90,15 +112,19 @@ public class Repository
         }
     }
 
-    private static class GetShortenedInfoAsyncTask extends AsyncTask<Long, Void, ShortenedBookInfo>
-    {
-        private ShortenedBooksDao dao;
 
-        private GetShortenedInfoAsyncTask(ShortenedBooksDao dao){ this.dao = dao;}
+    private static class GetBookInCartAsyncTask extends AsyncTask<Long, Void, BookInCart>
+    {
+        private BookInCartDao dao;
+
+        public GetBookInCartAsyncTask(BookInCartDao dao) {
+            this.dao = dao;
+        }
 
         @Override
-        protected ShortenedBookInfo doInBackground(Long... longs) {
-            return dao.getBookById(longs[0]);
+        protected BookInCart doInBackground(Long... longs) {
+            System.out.println("Book id db " + longs[0]);
+            return null;//dao.getBookInCartById(longs[0]);
         }
     }
 }

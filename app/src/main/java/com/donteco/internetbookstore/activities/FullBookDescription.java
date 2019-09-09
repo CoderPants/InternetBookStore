@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,19 +15,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.donteco.internetbookstore.R;
+import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
-import com.donteco.internetbookstore.storage.Storage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 public class FullBookDescription extends BaseActivity {
 
-    private ImageView bookImage;
+    private ImageView image;
     private TextView pageAmount;
     private TextView publishDate;
     private RatingBar ratingBar;
@@ -39,12 +38,20 @@ public class FullBookDescription extends BaseActivity {
     private TextView author;
     private TextView description;
 
+    private FloatingActionButton addBtn;
+
     private TextView subtitle;
     private TextView publishers;
     private TextView isbn10;
     private TextView isbn13;
 
     private RepositoryViewModel viewModel;
+
+    //Book data
+    private long bookId;
+    private String bookTitle;
+    private String bookPrice;
+    private String bookImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,7 +63,7 @@ public class FullBookDescription extends BaseActivity {
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel.class);
 
-        bookImage = findViewById(R.id.full_book_activity_iv_for_book_image);
+        image = findViewById(R.id.full_book_activity_iv_for_book_image);
         pageAmount = findViewById(R.id.full_book_description_activity_tv_amount_of_pages);
         publishDate = findViewById(R.id.full_book_description_activity_tv_published_year);
         ratingBar = findViewById(R.id.full_book_description_activity_ratingBar);
@@ -77,9 +84,26 @@ public class FullBookDescription extends BaseActivity {
 
         fillActivity();
 
-        addToCartLogic( findViewById(R.id.full_book_description_fab_for_adding_to_cart) );
+        addBtn = findViewById(R.id.full_book_description_fab_for_adding_to_cart);
+
+        /*if(viewModel.isBookInCart(getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0)))
+            disableBtn(addBtn);
+        else*/
+        addToCartLogic(addBtn);
+
+        checkIfBookInCart();
+
         goBackLogic( findViewById(R.id.full_book_description_go_back) );
     }
+
+    private void checkIfBookInCart() {
+        viewModel.getBookInCartById(bookId).observe(this, bookInCart ->
+        {
+            if(bookInCart != null)
+                disableBtn(addBtn);
+        });
+    }
+
 
     private void goBackLogic(RelativeLayout returnToMain) {
         returnToMain.setOnClickListener(view ->
@@ -91,14 +115,29 @@ public class FullBookDescription extends BaseActivity {
     {
         addToCartBtn.setOnClickListener(view ->
         {
-            long bookId = getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
+            try
+            {
+                viewModel.insertBookToCart( new BookInCart( bookId, bookTitle, bookPrice, 1, bookImage) );
+
+                Toast.makeText(getApplicationContext(), "Book successfully added to the cart!", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e)
+            {
+                Log.e(ConstantsForApp.LOG_TAG,
+                        "Exception in FullBookDescription activity in addToCartLogic, " +
+                                "caused by inserting data to db. Exception ", e);
+                Toast.makeText(getApplicationContext(), "Something wrong, contact us.", Toast.LENGTH_SHORT).show();
+            }
+
+            disableBtn(addToCartBtn);
+            /*long bookId = getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
             try{
                 Storage.addToCart( viewModel.getShortenedBookInfo(bookId) );
                 Toast.makeText(getApplicationContext(), "Book successfully added to the cart!", Toast.LENGTH_SHORT).show();
             }
             catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Something wrong, contact us.", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         });
     }
 
@@ -106,26 +145,30 @@ public class FullBookDescription extends BaseActivity {
     {
         Intent intent = getIntent();
 
+        bookImage = intent.getStringExtra(IntentKeys.FULL_BOOK_IMAGE);
         try
         {
             Picasso.get()
-                    .load(intent.getStringExtra(IntentKeys.FULL_BOOK_IMAGE))
-                    .into(bookImage);
+                    .load(bookImage)
+                    .into(image);
         }
         catch (Exception e)
         {
             Log.e(ConstantsForApp.LOG_TAG,
                     "Internet problem or no book icon. Exception caught in fill activity method" +
                             " in FullBookDescription activity. Exception: ", e);
-            bookImage.setImageDrawable(getDrawable(R.drawable.no_book_image_icon));
+            image.setImageDrawable(getDrawable(R.drawable.no_book_image_icon));
         }
 
         pageAmount.setText( String.valueOf(intent.getIntExtra(IntentKeys.FULL_BOOK_PAGES, 0)) );
         publishDate.setText( String.valueOf(intent.getIntExtra(IntentKeys.FULL_BOOK_YEAR, 0)) );
         ratingBar.setRating(intent.getIntExtra(IntentKeys.FULL_BOOK_RATING, 0));
 
-        price.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_PRICE)) );
-        title.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_TITLE)) );
+        bookTitle = intent.getStringExtra(IntentKeys.FULL_BOOK_TITLE);
+        bookPrice = intent.getStringExtra(IntentKeys.FULL_BOOK_PRICE);
+
+        price.setText( checkFroEmptyAnswer(bookPrice) );
+        title.setText( checkFroEmptyAnswer(bookTitle) );
 
         String checker = checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_AUTHORS));
         author.setText( checker.equals("none")? checker: "by " + checker);
@@ -151,11 +194,16 @@ public class FullBookDescription extends BaseActivity {
         publishers.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_PUBLISHERS)) );
         isbn10.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_ISBN10)) );
 
-        isbn13.setText(String.valueOf( intent.getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0)) );
+        bookId = intent.getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
+        isbn13.setText(String.valueOf(bookId) );
     }
 
     private String checkFroEmptyAnswer(@NonNull String bookInfo) {
         return (bookInfo.trim().length() == 0)? "none": bookInfo;
     }
 
+    private void disableBtn(FloatingActionButton btn){
+        btn.setClickable(false);
+        btn.setImageDrawable(getDrawable(R.drawable.ic_check_black_24dp));
+    }
 }

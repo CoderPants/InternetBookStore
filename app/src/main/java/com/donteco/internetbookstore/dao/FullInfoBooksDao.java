@@ -19,12 +19,6 @@ public interface FullInfoBooksDao
     @Insert(onConflict = REPLACE)
     void insertFullBook(FullBookInfo entity);
 
-    @Update
-    void updateFullBook(FullBookInfo entity);
-
-    @Delete
-    void deleteFullBook(FullBookInfo entity);
-
     @Query("SELECT * FROM full_books_description WHERE id LIKE :id")
     FullBookInfo getFullBookByRequest(long id);
 

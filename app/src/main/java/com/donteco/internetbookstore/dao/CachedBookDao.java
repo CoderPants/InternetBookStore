@@ -21,5 +21,4 @@ public interface CachedBookDao
 
     @Query("DELETE FROM cached_books")
     void deleteAll();
-
 }
