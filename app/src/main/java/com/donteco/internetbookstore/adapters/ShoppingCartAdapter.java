@@ -91,13 +91,13 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                         .into(bookImage);
 
             bookTitle.setText(bookInCart.getTitle());
-            //bookAuthor.setText(shortenedBookInfo.getSubtitle());
-            /*String textForTv = bookInCart.getAmount() + " X " + bookInCart.getPrice();
-            amountOfBooksAndPrice.setText(textForTv);*/
             setPriceAndAmount(bookInCart);
 
             String bookValue =  bookInCart.getTotalPrice() + "$";
             bookPrice.setText(bookValue);
+
+            if(bookInCart.getAmount() == 1)
+                deleteOneBook.setVisibility(View.INVISIBLE);
 
             addOneBookLogic(bookInCart);
             deleteOneBookLogic(bookInCart);
@@ -113,10 +113,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 {
                     bookInCart.setAmount(amount);
                     setPriceAndAmount(bookInCart);
-                    //amountOfBooks.setText(String.valueOf(amount));
                     setBookPrice(bookInCart);
                     callBack.updateBookInCartInfo(bookInCart);
                 }
+                else
+                    deleteOneBook.setVisibility(View.INVISIBLE);
             });
         }
 
@@ -124,10 +125,12 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         {
             addOneMoreBook.setOnClickListener(view ->
             {
+                deleteOneBook.setVisibility(View.VISIBLE);
+
                 int amount = bookInCart.getAmount()+1;
                 bookInCart.setAmount(amount);
                 setPriceAndAmount(bookInCart);
-                //amountOfBooks.setText(String.valueOf(amount));
+
                 setBookPrice(bookInCart);
                 callBack.updateBookInCartInfo(bookInCart);
             });

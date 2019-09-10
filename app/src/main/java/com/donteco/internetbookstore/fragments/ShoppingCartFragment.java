@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,8 +31,9 @@ public class ShoppingCartFragment extends Fragment
     private RepositoryViewModel viewModel;
     private ShoppingCartAdapter adapter;
 
-    private TextView totalAmount;
-    private double totalAmountNumerical;
+    private TextView totalAmountOfBooks;
+    private TextView totalAmountOfMoney;
+    private double amountOfMoney;
 
     @Nullable
     @Override
@@ -54,7 +54,8 @@ public class ShoppingCartFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        totalAmount = view.findViewById(R.id.cart_fragment_tv_for_total_price);
+        totalAmountOfMoney = view.findViewById(R.id.cart_fragment_tv_for_total_price);
+        totalAmountOfBooks = view.findViewById(R.id.cart_fragment_tv_top);
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel.class);
         adapter = new ShoppingCartAdapter(new ShoppingCartAdapter.CallBack() {
@@ -102,17 +103,24 @@ public class ShoppingCartFragment extends Fragment
 
     private void setTotalAmount() {
         List<BookInCart> cart = adapter.getShoppingCart();
-        totalAmountNumerical = 0;
+        amountOfMoney = 0;
+        int amountOfBooks = 0;
 
         for (BookInCart bookInCart : cart)
-            totalAmountNumerical += bookInCart.getTotalPrice();
+        {
+            amountOfMoney += bookInCart.getTotalPrice();
+            amountOfBooks += bookInCart.getAmount();
+        }
 
         formatAmount();
-        String updatedAmount = totalAmountNumerical + "$";
-        totalAmount.setText(updatedAmount);
+        String updatedAmount = amountOfMoney + "$";
+        totalAmountOfMoney.setText(updatedAmount);
+
+        String amountOfBooksInCart = "My Shopping cart (" + amountOfBooks + ")";
+        totalAmountOfBooks.setText(amountOfBooksInCart);
     }
 
     private void formatAmount(){
-        totalAmountNumerical = Math.floor(totalAmountNumerical*100) / 100;
+        amountOfMoney = Math.floor(amountOfMoney *100) / 100;
     }
 }

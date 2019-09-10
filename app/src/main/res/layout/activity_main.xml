@@ -31,9 +31,9 @@
         android:layout_alignParentBottom="true"
 
         android:background="?android:attr/windowBackground"
-        app:itemIconTint="@color/black85"
+        app:itemIconTint="@color/bottom_navigation_background"
         app:itemTextColor="@color/black"
-        app:labelVisibilityMode="selected"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/main_menu"
         />
 

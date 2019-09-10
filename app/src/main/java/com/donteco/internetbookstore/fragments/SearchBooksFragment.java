@@ -43,6 +43,12 @@ public class SearchBooksFragment extends Fragment
     private RequestSender requestSender;
     private RepositoryViewModel viewModel;
 
+    //For recycler view scroll
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+    private int topViewIndex;
+    private int curIndexPosition;
+
     //Fields for single creation
     private Activity activity;
     private String userInput;
@@ -78,7 +84,8 @@ public class SearchBooksFragment extends Fragment
         searchBar = view.findViewById(R.id.book_search_bar);
         searchBooksBtnLogic(view.findViewById(R.id.book_search_iv));
 
-        recyclerViewCreation(view.findViewById(R.id.rv_books));
+        recyclerView = view.findViewById(R.id.rv_books);
+        recyclerViewCreation();
 
         setLiveDataObserver();
     }
@@ -130,11 +137,8 @@ public class SearchBooksFragment extends Fragment
             }
 
             @Override
-            public void onGetBookInfoResponse(FullBookInfo fullBookInfo)
-            {
-                loadingIndicator.setVisibility(View.INVISIBLE);
-                viewModel.insertFullBookInfo(fullBookInfo);
-                startFullDescriptionActivity(fullBookInfo);
+            public void onGetBookInfoResponse(FullBookInfo fullBookInfo) {
+                //Nothing
             }
 
             @Override
@@ -145,9 +149,10 @@ public class SearchBooksFragment extends Fragment
         });
     }
 
-    private void recyclerViewCreation(RecyclerView recyclerView)
+    private void recyclerViewCreation()
     {
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        linearLayoutManager = new LinearLayoutManager(activity);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         adapter = new ChooseBooksAdapter(new ChooseBooksAdapter.ChooseAdapterCallBack()
         {
@@ -157,44 +162,15 @@ public class SearchBooksFragment extends Fragment
             }
 
             @Override
-            public void uploadFullBookInfo(long id) {
-                loadingIndicator.setVisibility(View.VISIBLE);
-
-                viewModel.getFullBookInfoById(id).observe(SearchBooksFragment.this, fullBookInfo ->
-                {
-                    if(fullBookInfo == null)
-                        requestSender.sentGetFullBookInfo(id);
-                    else
-                    {
-                        loadingIndicator.setVisibility(View.INVISIBLE);
-                        startFullDescriptionActivity(fullBookInfo);
-                    }
-                });
+            public void uploadFullBookInfo(long id)
+            {
+                Intent intent = new Intent(activity, FullBookDescription.class);
+                intent.putExtra(IntentKeys.FULL_BOOK_ISBN13, id);
+                startActivity(intent);
             }
         });
 
         recyclerView.setAdapter(adapter);
-    }
-
-    private void startFullDescriptionActivity(FullBookInfo fullBookInfo)
-    {
-        Intent intent = new Intent(activity, FullBookDescription.class);
-        intent.putExtra(IntentKeys.FULL_BOOK_TITLE, fullBookInfo.getTitle());
-        intent.putExtra(IntentKeys.FULL_BOOK_SUBTITLE, fullBookInfo.getSubtitle());
-        intent.putExtra(IntentKeys.FULL_BOOK_AUTHORS, fullBookInfo.getAuthors());
-        intent.putExtra(IntentKeys.FULL_BOOK_PUBLISHERS, fullBookInfo.getPublisher());
-        intent.putExtra(IntentKeys.FULL_BOOK_ISBN10, fullBookInfo.getIsbn10());
-        intent.putExtra(IntentKeys.FULL_BOOK_ISBN13, fullBookInfo.getId());
-        intent.putExtra(IntentKeys.FULL_BOOK_PAGES, fullBookInfo.getPages());
-        intent.putExtra(IntentKeys.FULL_BOOK_YEAR, fullBookInfo.getYear());
-        intent.putExtra(IntentKeys.FULL_BOOK_RATING, fullBookInfo.getRating());
-        intent.putExtra(IntentKeys.FULL_BOOK_DESCRIPTION, fullBookInfo.getDescription());
-        intent.putExtra(IntentKeys.FULL_BOOK_PRICE, fullBookInfo.getPrice());
-        intent.putExtra(IntentKeys.FULL_BOOK_IMAGE, fullBookInfo.getImage());
-        intent.putExtra(IntentKeys.FULL_BOOK_URL, fullBookInfo.getUrl());
-        intent.putExtra(IntentKeys.FULL_BOOK_LANGUAGE, fullBookInfo.getLanguage());
-
-        startActivity(intent);
     }
 
     @Override
@@ -209,14 +185,23 @@ public class SearchBooksFragment extends Fragment
             setLiveDataObserver();
         }
 
-        /*viewModel.getBooksByUserRequest(userInput).observe(SearchBooksFragment.this, shortenedBookInfos ->
-                adapter.setBooks(shortenedBookInfos));*/
+        //Get to the last position;
+        System.out.println("CurIndex position " + Storage.getLastRVPosition());
+//        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPosition(Storage.getLastRVPosition());
+        linearLayoutManager.scrollToPosition(Storage.getLastRVPosition());
 
         super.onResume();
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
+        //Save lastPosition
+        int curIndexPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).
+                findFirstCompletelyVisibleItemPosition();
+        System.out.println("CurIndex position " + curIndexPosition);
+        Storage.setLastRVPosition(curIndexPosition);
+
         Storage.setUserInput(searchBar.getText().toString());
         super.onPause();
     }

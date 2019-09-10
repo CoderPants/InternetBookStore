@@ -1,0 +1,20 @@
+<RelativeLayout
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="@dimen/bnv_badge_margin_start">
+
+    <TextView
+        android:id="@+id/notifications_badge"
+        android:layout_width="@dimen/bnv_badge_width"
+        android:layout_height="@dimen/bnv_badge_height"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/notification_badge"
+        android:padding="@dimen/bnv_badge_padding"
+        android:gravity="center"
+        android:textAlignment="center"
+
+        android:textColor="@color/white"
+        android:textSize="@dimen/bnv_badge_text_size" />
+</RelativeLayout>

@@ -54,7 +54,7 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
     public ChooseBooksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.main_activity_recycler_view_element, parent, false);
+                .inflate(R.layout.fragment_search_for_books_recycler_view_element, parent, false);
         return new ChooseBooksViewHolder(view);
     }
 
@@ -98,6 +98,7 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
             bookTitle.setText(shortenedBookInfo.getTitle());
             bookSubTitle.setText(shortenedBookInfo.getSubtitle());
             bookPrice.setText(shortenedBookInfo.getPrice());
+
             layoutLogic();
         }
 

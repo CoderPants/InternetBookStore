@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,13 +22,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.books.BookInCart;
+import com.donteco.internetbookstore.books.FullBookInfo;
+import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
+import com.donteco.internetbookstore.request.RequestSender;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class FullBookDescription extends BaseActivity {
+
+    private ProgressBar loadingIndicator;
 
     private ImageView image;
     private TextView pageAmount;
@@ -46,6 +55,7 @@ public class FullBookDescription extends BaseActivity {
     private TextView isbn13;
 
     private RepositoryViewModel viewModel;
+    private RequestSender requestSender;
 
     //Book data
     private long bookId;
@@ -62,6 +72,8 @@ public class FullBookDescription extends BaseActivity {
         getRidOfTopBar();
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel.class);
+
+        loadingIndicator = findViewById(R.id.full_book_description_activity_pb_loading_indicator);
 
         image = findViewById(R.id.full_book_activity_iv_for_book_image);
         pageAmount = findViewById(R.id.full_book_description_activity_tv_amount_of_pages);
@@ -82,18 +94,57 @@ public class FullBookDescription extends BaseActivity {
         stars.getDrawable(2).setColorFilter(ContextCompat.getColor(this, R.color.black),
                 PorterDuff.Mode.SRC_ATOP);
 
-        fillActivity();
+        requestSenderCreation();
+
+        getFullBookInfo();
 
         addBtn = findViewById(R.id.full_book_description_fab_for_adding_to_cart);
 
-        /*if(viewModel.isBookInCart(getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0)))
-            disableBtn(addBtn);
-        else*/
         addToCartLogic(addBtn);
 
-        checkIfBookInCart();
-
         goBackLogic( findViewById(R.id.full_book_description_go_back) );
+    }
+
+    private void getFullBookInfo() {
+        loadingIndicator.setVisibility(View.VISIBLE);
+
+        Intent intent = getIntent();
+        long bookId = intent.getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
+
+        viewModel.getFullBookInfoById(bookId).observe(this, fullBookInfo ->
+        {
+            if(fullBookInfo == null)
+                requestSender.sentGetFullBookInfo(bookId);
+            else
+            {
+                loadingIndicator.setVisibility(View.INVISIBLE);
+                fillActivity(fullBookInfo);
+            }
+        });
+    }
+
+    private void requestSenderCreation() {
+        requestSender = new RequestSender(new RequestSender.RequestCallBack() {
+            @Override
+            public void onGetBooksResponse(List<ShortenedBookInfo> receivedShortenedBooksInfo) {
+                //Nothing
+            }
+
+            @Override
+            public void onGetBookInfoResponse(FullBookInfo fullBookInfo) {
+                loadingIndicator.setVisibility(View.INVISIBLE);
+                fillActivity(fullBookInfo);
+                viewModel.insertFullBookInfo(fullBookInfo);
+            }
+
+            @Override
+            public void onNoBooksCondition() {
+                loadingIndicator.setVisibility(View.INVISIBLE);
+                Toast.makeText(FullBookDescription.this,
+                        "Sorry, there is no book info on server!",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void checkIfBookInCart() {
@@ -106,11 +157,9 @@ public class FullBookDescription extends BaseActivity {
 
 
     private void goBackLogic(RelativeLayout returnToMain) {
-        returnToMain.setOnClickListener(view ->
-                startActivity(new Intent(FullBookDescription.this, MainActivity.class)));
+        returnToMain.setOnClickListener(view -> onBackPressed());
     }
 
-    //Need to fix logic!!!
     private void addToCartLogic(FloatingActionButton addToCartBtn)
     {
         addToCartBtn.setOnClickListener(view ->
@@ -130,22 +179,13 @@ public class FullBookDescription extends BaseActivity {
             }
 
             disableBtn(addToCartBtn);
-            /*long bookId = getIntent().getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
-            try{
-                Storage.addToCart( viewModel.getShortenedBookInfo(bookId) );
-                Toast.makeText(getApplicationContext(), "Book successfully added to the cart!", Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Something wrong, contact us.", Toast.LENGTH_SHORT).show();
-            }*/
         });
     }
 
-    private void fillActivity()
+    private void fillActivity(FullBookInfo fullBookInfo)
     {
-        Intent intent = getIntent();
 
-        bookImage = intent.getStringExtra(IntentKeys.FULL_BOOK_IMAGE);
+        bookImage = fullBookInfo.getImage();
         try
         {
             Picasso.get()
@@ -160,27 +200,27 @@ public class FullBookDescription extends BaseActivity {
             image.setImageDrawable(getDrawable(R.drawable.no_book_image_icon));
         }
 
-        pageAmount.setText( String.valueOf(intent.getIntExtra(IntentKeys.FULL_BOOK_PAGES, 0)) );
-        publishDate.setText( String.valueOf(intent.getIntExtra(IntentKeys.FULL_BOOK_YEAR, 0)) );
-        ratingBar.setRating(intent.getIntExtra(IntentKeys.FULL_BOOK_RATING, 0));
+        pageAmount.setText( String.valueOf(fullBookInfo.getPages()) );
+        publishDate.setText( String.valueOf(fullBookInfo.getYear()) );
+        ratingBar.setRating(fullBookInfo.getRating());
 
-        bookTitle = intent.getStringExtra(IntentKeys.FULL_BOOK_TITLE);
-        bookPrice = intent.getStringExtra(IntentKeys.FULL_BOOK_PRICE);
+        bookTitle = fullBookInfo.getTitle();
+        bookPrice = fullBookInfo.getPrice();
 
         price.setText( checkFroEmptyAnswer(bookPrice) );
         title.setText( checkFroEmptyAnswer(bookTitle) );
 
-        String checker = checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_AUTHORS));
+        String checker = checkFroEmptyAnswer(fullBookInfo.getAuthors());
         author.setText( checker.equals("none")? checker: "by " + checker);
 
-        checker = intent.getStringExtra(IntentKeys.FULL_BOOK_DESCRIPTION).trim();
+        checker = fullBookInfo.getDescription().trim();
 
         if(checker.length() != 0)
         {
             checker = checker.replace("...", "").trim();
 
             StringBuilder descriptionLink = new StringBuilder(checker);
-            String link = "<a href='"+ intent.getStringExtra(IntentKeys.FULL_BOOK_URL) +"'>...</a>";
+            String link = "<a href='"+ fullBookInfo.getUrl() +"'>...</a>";
 
             descriptionLink = descriptionLink.append(link);
             description.setMovementMethod(LinkMovementMethod.getInstance());
@@ -189,13 +229,14 @@ public class FullBookDescription extends BaseActivity {
         else
             description.setText("none");
 
-        language.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_LANGUAGE)) );
-        subtitle.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_SUBTITLE)) );
-        publishers.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_PUBLISHERS)) );
-        isbn10.setText( checkFroEmptyAnswer(intent.getStringExtra(IntentKeys.FULL_BOOK_ISBN10)) );
+        language.setText( checkFroEmptyAnswer(fullBookInfo.getLanguage()) );
+        subtitle.setText( checkFroEmptyAnswer(fullBookInfo.getSubtitle()) );
+        publishers.setText( checkFroEmptyAnswer(fullBookInfo.getPublisher()) );
+        isbn10.setText( checkFroEmptyAnswer(fullBookInfo.getIsbn10()) );
 
-        bookId = intent.getLongExtra(IntentKeys.FULL_BOOK_ISBN13, 0);
+        bookId = fullBookInfo.getId();
         isbn13.setText(String.valueOf(bookId) );
+        checkIfBookInCart();
     }
 
     private String checkFroEmptyAnswer(@NonNull String bookInfo) {

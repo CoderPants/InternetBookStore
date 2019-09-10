@@ -41,7 +41,6 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/black95"
                 android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
-                android:text="Book title"
                 />
 
             <TextView
@@ -53,8 +52,7 @@
                 android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
                 android:textAlignment="textStart"
                 android:textColor="@color/black95"
-                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
-                android:text="Author"/>
+                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom" />
 
             <TextView
                 android:id="@+id/main_element_book_price"
@@ -65,9 +63,9 @@
                 android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
                 android:textAlignment="textStart"
                 android:textColor="@color/black95"
-                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom"
-                android:text="35$"/>
+                android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom" />
         </LinearLayout>
+
     </LinearLayout>
     <View
         android:id="@+id/main_element_bottom_border"

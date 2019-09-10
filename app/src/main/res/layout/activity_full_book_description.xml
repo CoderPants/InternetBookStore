@@ -72,7 +72,6 @@
                     android:layout_marginStart="@dimen/full_book_description_iv_margin_from_borders"
                     android:layout_marginBottom="@dimen/full_book_description_iv_margin_from_borders"
                     android:layout_marginEnd="@dimen/full_book_description_iv_margin_from_additional_info"
-                    android:src="@drawable/no_book_image_icon"
                     />
 
                     <LinearLayout
@@ -191,5 +190,12 @@
         app:backgroundTint="@color/white"/>
 
     <include layout="@layout/full_book_description_nsv_layout"/>
+
+    <ProgressBar
+        android:id="@+id/full_book_description_activity_pb_loading_indicator"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:layout_width="@dimen/main_activity_progress_bar_width"
+        android:layout_height="@dimen/main_activity_progress_bar_height" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

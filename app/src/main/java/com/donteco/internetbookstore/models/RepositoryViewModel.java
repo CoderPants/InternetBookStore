@@ -22,6 +22,8 @@ public class RepositoryViewModel extends AndroidViewModel {
     private MutableLiveData<String> userInputLiveData;
     private LiveData<List<ShortenedBookInfo>> shortenedInfoBooks;
 
+    private int curRVPosition;
+
     public RepositoryViewModel(@NonNull Application application) {
         super(application);
 
@@ -91,4 +93,11 @@ public class RepositoryViewModel extends AndroidViewModel {
     }
 
 
+    public int getCurRVPosition() {
+        return curRVPosition;
+    }
+
+    public void setCurRVPosition(int curRVPosition) {
+        this.curRVPosition = curRVPosition;
+    }
 }

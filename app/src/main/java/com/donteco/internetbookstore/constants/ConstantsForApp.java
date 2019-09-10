@@ -11,6 +11,6 @@ public class ConstantsForApp {
     public static final int REQUEST_PAGE_AMOUNT = 5;
 
     public static final String SHARED_PREFERENCES_FILE_NAME = "SHARED_PREFERENCES";
-    public static final String KEY_FOR_STORED_CART = "STORED_CART";
     public static final String KEY_FOR_USER_INPUT = "USER_INPUT";
+    public static final String KEY_FOR_LAST_RV_POSITION = "LAST_RV_POSITION";
 }

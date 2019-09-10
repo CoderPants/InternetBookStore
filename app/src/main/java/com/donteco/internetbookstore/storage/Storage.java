@@ -10,10 +10,13 @@ public class Storage {
     private static Storage storage;
 
     private static String userInput;
+    private static int lastRVPosition;
 
     private Storage(Context context) {
         sharedPreferences = context.getSharedPreferences(ConstantsForApp.SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
+
+        lastRVPosition = -1;
     }
 
     public static void loadStorage(Context context){
@@ -23,10 +26,13 @@ public class Storage {
 
     public static void pushAllToStorage(){
         pushUserInputToStorage();
+        pushLastPositionToStorage();
     }
 
     public static void pullAllFromStorage(){
-        pullUserInputFormStorage();
+
+        pullUserInputFromStorage();
+        pullLastPositionFromStorage();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -39,7 +45,7 @@ public class Storage {
         pushUserInputToStorage();
     }
 
-    private static void pullUserInputFormStorage()
+    private static void pullUserInputFromStorage()
     {
         String json = sharedPreferences.getString(ConstantsForApp.KEY_FOR_USER_INPUT, "");
         if(userInput == null)
@@ -50,6 +56,31 @@ public class Storage {
     {
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(ConstantsForApp.KEY_FOR_USER_INPUT, userInput);
+        editor.apply();
+    }
+
+    //---------------------------------------------------------------------------------------------
+
+    public static int getLastRVPosition() {
+        return lastRVPosition;
+    }
+
+    public static void setLastRVPosition(int lastRVPosition) {
+        Storage.lastRVPosition = lastRVPosition;
+        pushLastPositionToStorage();
+    }
+
+    private static void pullLastPositionFromStorage()
+    {
+        String json = sharedPreferences.getString(ConstantsForApp.KEY_FOR_LAST_RV_POSITION, "");
+        if(lastRVPosition == -1 && json.length() != 0)
+            lastRVPosition = Integer.valueOf(json);
+    }
+
+    private static void pushLastPositionToStorage()
+    {
+        android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(ConstantsForApp.KEY_FOR_LAST_RV_POSITION, String.valueOf(lastRVPosition));
         editor.apply();
     }
 }
