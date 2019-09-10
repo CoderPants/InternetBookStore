@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|start"
                 android:fontFamily="@string/text_style"
-                android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
+                android:textSize="@dimen/main_recycler_view_element_tv_book_subtitle_text_size"
                 android:textAlignment="textStart"
                 android:textColor="@color/black95"
                 android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom" />
@@ -61,6 +61,7 @@
                 android:layout_gravity="center_horizontal|start"
                 android:fontFamily="@string/text_style"
                 android:textSize="@dimen/main_recycler_view_element_tv_book_prise_text_size"
+                android:textStyle="bold"
                 android:textAlignment="textStart"
                 android:textColor="@color/black95"
                 android:layout_marginBottom="@dimen/main_element_tv_book_data_margin_bottom" />

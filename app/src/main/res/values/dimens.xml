@@ -6,4 +6,5 @@
     <dimen name="full_book_description_activity_details">21sp</dimen>
     <dimen name="cart_fragment_number_picker_magrin_bottom">5dp</dimen>
     <dimen name="cart_fragment_number_picker_text">21sp</dimen>
+
 </resources>

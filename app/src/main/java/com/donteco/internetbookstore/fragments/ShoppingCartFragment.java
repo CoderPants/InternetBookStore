@@ -95,9 +95,6 @@ public class ShoppingCartFragment extends Fragment
     @Override
     public void onResume() {
         setViewModel();
-
-        //setTotalAmount();
-
         super.onResume();
     }
 

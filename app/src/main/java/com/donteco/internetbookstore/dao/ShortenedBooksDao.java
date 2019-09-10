@@ -1,12 +1,9 @@
 package com.donteco.internetbookstore.dao;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
 
@@ -28,8 +25,4 @@ public interface ShortenedBooksDao {
             "WHERE cached_books.userRequest LIKE :userRequest ")
     LiveData<List<ShortenedBookInfo>> getShortenedBooksByRequest(String userRequest);
 
-    @Query("SELECT * " +
-            "FROM shortened_book_description " +
-            "WHERE id LIKE :id")
-    ShortenedBookInfo getBookById(long id);
 }

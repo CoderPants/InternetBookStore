@@ -43,7 +43,6 @@ public class RequestSender {
                     callBack.onNoBooksCondition();
                 else
                 {
-                    System.out.println("Got into response!");
                     requestBackground = new RequestBackground
                             (userInput,RequestSender.this, totalNumberOfBooks);
 
@@ -78,7 +77,6 @@ public class RequestSender {
             @Override
             public void onResponse(@NotNull Call<ServerSearchResponse> call, @NotNull Response<ServerSearchResponse> response) {
                 ServerSearchResponse serverSearchResponse = response.body();
-                System.out.println("Call from the server " + serverSearchResponse);
                 callBack.onGetBooksResponse(serverSearchResponse.getShortenedBooksInfo());
             }
 

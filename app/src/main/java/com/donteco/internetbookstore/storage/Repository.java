@@ -74,19 +74,6 @@ public class Repository
         new Thread(() -> bookInCartDao.delete(bookInCart)).start();
     }
 
-    /*public BookInCart getBookInCartById(long id){
-        GetBookInCartAsyncTask asyncTask = new GetBookInCartAsyncTask(bookInCartDao);
-        asyncTask.execute(id);
-
-        try {
-            return asyncTask.get();
-        } catch (ExecutionException | InterruptedException e) {
-            Log.e(ConstantsForApp.LOG_TAG,
-                    "Caught exception in getBookInCartById. Caused by getting info from db. Exception " + e);
-        }
-        return null;
-    }*/
-
     public LiveData<List<BookInCart>> getCart(){
         return bookInCartDao.getCart();
     }
@@ -101,32 +88,5 @@ public class Repository
 
     public LiveData<FullBookInfo> getFullBookInfoById(long id){
         return fullInfoBooksDao.getFullBookInfoById(id);
-    }
-
-    public FullBookInfo getFullBookInfo(long id)
-    {
-        GetFullInfoAsyncTask asyncTask = new GetFullInfoAsyncTask(fullInfoBooksDao);
-        asyncTask.execute(id);
-        try {
-            return asyncTask.get();
-        } catch (ExecutionException | InterruptedException e) {
-            Log.e(ConstantsForApp.LOG_TAG,
-                    "Caught exception in getFullBoonInfo. Caused by getting info from db. Exception " + e);
-        }
-        return null;
-    }
-
-    private static class GetFullInfoAsyncTask extends AsyncTask<Long, Void, FullBookInfo>
-    {
-        private FullInfoBooksDao dao;
-
-        private GetFullInfoAsyncTask(FullInfoBooksDao dao){
-            this.dao = dao;
-        }
-
-        @Override
-        protected FullBookInfo doInBackground(Long... longs) {
-            return dao.getFullBookByRequest(longs[0]);
-        }
     }
 }

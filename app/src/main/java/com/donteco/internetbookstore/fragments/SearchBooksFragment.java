@@ -45,9 +45,6 @@ public class SearchBooksFragment extends Fragment
 
     //For recycler view scroll
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
-    private int topViewIndex;
-    private int curIndexPosition;
 
     //Fields for single creation
     private Activity activity;
@@ -107,6 +104,7 @@ public class SearchBooksFragment extends Fragment
         {
             userInput = searchBar.getText().toString();
             requestSender.stopRequesting();
+            scrollRV(0);
 
             //IF user didn't enter anything
             if(userInput.trim().length() == 0)
@@ -152,8 +150,7 @@ public class SearchBooksFragment extends Fragment
 
     private void recyclerViewCreation()
     {
-        linearLayoutManager = new LinearLayoutManager(activity);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         adapter = new ChooseBooksAdapter(new ChooseBooksAdapter.ChooseAdapterCallBack()
         {
@@ -174,6 +171,15 @@ public class SearchBooksFragment extends Fragment
         recyclerView.setAdapter(adapter);
     }
 
+    private void scrollRV(int position){
+        recyclerView.post(() -> recyclerView.scrollToPosition(position));
+    }
+
+    private int getRVIndex(){
+        return ((LinearLayoutManager)recyclerView.getLayoutManager()).
+                findFirstCompletelyVisibleItemPosition();
+    }
+
     @Override
     public void onResume()
     {
@@ -187,9 +193,7 @@ public class SearchBooksFragment extends Fragment
         }
 
         //Get to the last position;
-        System.out.println("CurIndex position " + Storage.getLastRVPosition());
-//        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPosition(Storage.getLastRVPosition());
-        linearLayoutManager.scrollToPosition(Storage.getLastRVPosition());
+        scrollRV(Storage.getLastRVPosition());
 
         super.onResume();
     }
@@ -198,24 +202,15 @@ public class SearchBooksFragment extends Fragment
     public void onPause()
     {
         //Save lastPosition
-        int curIndexPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).
-                findFirstCompletelyVisibleItemPosition();
-        System.out.println("CurIndex position " + curIndexPosition);
-        Storage.setLastRVPosition(curIndexPosition);
-
+        Storage.setLastRVPosition(getRVIndex());
         Storage.setUserInput(searchBar.getText().toString());
         super.onPause();
     }
 
     @Override
-    public void onDestroy() {
+    public void onStop() {
+        Storage.setLastRVPosition(getRVIndex());
         Storage.setUserInput(searchBar.getText().toString());
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Storage.setUserInput(searchBar.getText().toString());
-        super.onDestroyView();
+        super.onStop();
     }
 }

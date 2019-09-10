@@ -5,7 +5,8 @@
     <dimen name="main_recycler_view_element_lv_max_height">100dp</dimen>
     <dimen name="main_element_iv_margin_end">20dp</dimen>
     <dimen name="main_recycler_view_element_tv_book_title_text_size">15sp</dimen>
-    <dimen name="main_recycler_view_element_tv_book_prise_text_size">11sp</dimen>
+    <dimen name="main_recycler_view_element_tv_book_subtitle_text_size">11sp</dimen>
+    <dimen name="main_recycler_view_element_tv_book_prise_text_size">15sp</dimen>
     <dimen name="main_recycler_view_element_tv_book_rating_text_size">15sp</dimen>
     <dimen name="main_element_tv_book_data_margin_bottom">15dp</dimen>
     <dimen name="main_recycler_view_bottom_border_height">1dp</dimen>

@@ -22,8 +22,6 @@ public class RepositoryViewModel extends AndroidViewModel {
     private MutableLiveData<String> userInputLiveData;
     private LiveData<List<ShortenedBookInfo>> shortenedInfoBooks;
 
-    private int curRVPosition;
-
     public RepositoryViewModel(@NonNull Application application) {
         super(application);
 
@@ -51,20 +49,12 @@ public class RepositoryViewModel extends AndroidViewModel {
         return repository.getFullBookInfoById(id);
     }
 
-    public LiveData<String> getuserInputLiveData() {
-        return userInputLiveData;
-    }
-
     public void setuserInputLiveData(String userInput) {
         userInputLiveData.setValue(userInput);
     }
 
     public LiveData<List<ShortenedBookInfo>> getShortenedInfoBooks(){
         return shortenedInfoBooks;
-    }
-
-    public LiveData<List<ShortenedBookInfo>> getBooksByUserRequest(String request) {
-        return repository.getShortenedBooksInfoByRequest(request);
     }
 
     public void insertBookToCart(BookInCart bookInCart){
@@ -79,11 +69,6 @@ public class RepositoryViewModel extends AndroidViewModel {
         repository.deleteBookInCart(bookInCart);
     }
 
-    /*public boolean isBookInCart(long id){
-        System.out.println("Book in db " + repository.getBookInCartById(id));
-        return repository.getBookInCartById(id) != null;
-    }*/
-
     public LiveData<BookInCart> getBookInCartById(long id){
         return repository.getBookInCartById(id);
     }
@@ -92,12 +77,4 @@ public class RepositoryViewModel extends AndroidViewModel {
         return repository.getCart();
     }
 
-
-    public int getCurRVPosition() {
-        return curRVPosition;
-    }
-
-    public void setCurRVPosition(int curRVPosition) {
-        this.curRVPosition = curRVPosition;
-    }
 }
