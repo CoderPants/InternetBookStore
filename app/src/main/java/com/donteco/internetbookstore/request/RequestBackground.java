@@ -39,48 +39,39 @@ public class RequestBackground
             @Override
             public void run()
             {
-                new BackGroundAsync().execute();
+                new BackGroundAsync(userRequest, startingPage, amountOfPages,
+                        requestSender, totalAmountOfPages, timer).execute();
             }
         };
 
         timer.schedule(timerTask, 0,10000);
     }
 
-   /* @Override
-    protected Void doInBackground(Void... voids)
-    {
-        //If there is 5 full pages
-        if(totalAmountOfPages - amountOfPages >= ConstantsForApp.REQUEST_PAGE_AMOUNT)
+    public void cancelTimer(){
+        if(timer != null)
         {
-            amountOfPages += ConstantsForApp.REQUEST_PAGE_AMOUNT;
-
-            for (int i = startingPage + 1; i <= amountOfPages ; i++)
-                requestSender.sentGetBooksRequest(userRequest, i);
-
-            startingPage = amountOfPages;
+            timer.cancel();
+            timer = null;
         }
-        //If there is < than 5 pages
-        else
-        {
-            for (int i = amountOfPages; i <= totalAmountOfPages; i++)
-                requestSender.sentGetBooksRequest(userRequest, i);
-
-            //We get all books, sent callback to finish timer
-            callBack.finished();
-        }
-
-        return null;
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        System.out.println("Progress " + values[0]);
-    }*/
 
-    private class BackGroundAsync extends AsyncTask<Void, Integer, Void>
+    private static class BackGroundAsync extends AsyncTask<Void, Integer, Void>
     {
-        private BackGroundAsync() {
+        private String userRequest;
+        private int startingPage;
+        private int amountOfPages;
+        private RequestSender requestSender;
+        private int totalAmountOfPages;
+        private Timer timer;
+
+        public BackGroundAsync(String userRequest, int startingPage, int amountOfPages, RequestSender requestSender, int totalAmountOfPages, Timer timer) {
+            this.userRequest = userRequest;
+            this.startingPage = startingPage;
+            this.amountOfPages = amountOfPages;
+            this.requestSender = requestSender;
+            this.totalAmountOfPages = totalAmountOfPages;
+            this.timer = timer;
         }
 
         @Override

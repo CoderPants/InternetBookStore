@@ -19,6 +19,9 @@ public class RequestSender {
     private RequestCallBack callBack;
     private int totalNumberOfBooks;
 
+    //For canceling requesting
+    private RequestBackground requestBackground;
+
     public RequestSender(RequestCallBack callBack) {
         this.callBack = callBack;
     }
@@ -41,7 +44,7 @@ public class RequestSender {
                 else
                 {
                     System.out.println("Got into response!");
-                    RequestBackground requestBackground = new RequestBackground
+                    requestBackground = new RequestBackground
                             (userInput,RequestSender.this, totalNumberOfBooks);
 
                     requestBackground.startRequest();
@@ -56,6 +59,11 @@ public class RequestSender {
                                 " Call itself " + call.request().toString(), t);
             }
         });
+    }
+
+    public void stopRequesting(){
+        if(requestBackground != null)
+            requestBackground.cancelTimer();
     }
 
     //Page number, cos api sending packages by 10 books
