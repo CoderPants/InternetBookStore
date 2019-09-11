@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -79,12 +82,35 @@ public class SearchBooksFragment extends Fragment
         requestSenderCreation();
 
         searchBar = view.findViewById(R.id.book_search_bar);
+        searchBarKeyLogic();
         searchBooksBtnLogic(view.findViewById(R.id.book_search_iv));
 
         recyclerView = view.findViewById(R.id.rv_books);
         recyclerViewCreation();
 
         setLiveDataObserver();
+    }
+
+    private void searchBarKeyLogic()
+    {
+        searchBar.setOnKeyListener((view, keyCode, keyEvent) ->
+        {
+            if(keyCode == EditorInfo.IME_ACTION_SEARCH ||
+                    keyCode == EditorInfo.IME_ACTION_DONE ||
+                    keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
+                            keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+                //Hide keyboard
+                InputMethodManager imm = (InputMethodManager)
+                        activity.getApplicationContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                startSearching();
+
+                return true;
+            }
+            return false;
+        });
     }
 
     private void setLiveDataObserver(){
@@ -100,22 +126,24 @@ public class SearchBooksFragment extends Fragment
     }
 
     private void searchBooksBtnLogic(ImageView imageView) {
-        imageView.setOnClickListener(view ->
-        {
-            userInput = searchBar.getText().toString();
-            requestSender.stopRequesting();
-            scrollRV(0);
+        imageView.setOnClickListener(view -> startSearching());
+    }
 
-            //IF user didn't enter anything
-            if(userInput.trim().length() == 0)
-                return;
+    private void startSearching()
+    {
+        userInput = searchBar.getText().toString();
+        requestSender.stopRequesting();
+        scrollRV(0);
 
-            if(SearchBooksHelper.isNetworkAvailable(activity))
-                requestSender.sentGetTotalBooksAmount(userInput);
+        //IF user didn't enter anything
+        if(userInput.trim().length() == 0)
+            return;
 
-            //On changing this we change live recyclerView
-            viewModel.setuserInputLiveData(userInput);
-        });
+        if(SearchBooksHelper.isNetworkAvailable(activity))
+            requestSender.sentGetTotalBooksAmount(userInput);
+
+        //On changing this we change live recyclerView
+        viewModel.setuserInputLiveData(userInput);
     }
 
     private void requestSenderCreation() {

@@ -1,6 +1,8 @@
 package com.donteco.internetbookstore.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.internetbookstore.R;
+import com.donteco.internetbookstore.activities.FullBookDescription;
 import com.donteco.internetbookstore.adapters.ShoppingCartAdapter;
 import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
+import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.helper.SwipeToDeleteCallBack;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 
@@ -67,6 +71,21 @@ public class ShoppingCartFragment extends Fragment
             @Override
             public void deleteBookInCart(BookInCart bookInCart) {
                 viewModel.deleteBookInCart(bookInCart);
+            }
+
+            @Override
+            public void uploadFullBookInfo(long id)
+            {
+                Intent intent = new Intent(activity, FullBookDescription.class);
+                intent.putExtra(IntentKeys.FULL_BOOK_ISBN13, id);
+                startActivity(intent);
+            }
+
+            @Override
+            public Drawable getBackGround(boolean isCLicked) {
+                return activity.getResources().getDrawable(
+                        (isCLicked)? R.drawable.recycler_view_element_background_pressed:
+                                R.drawable.recycler_view_element_background_stable, null);
             }
         });
 

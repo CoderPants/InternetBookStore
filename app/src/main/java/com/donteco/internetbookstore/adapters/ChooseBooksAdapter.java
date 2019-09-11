@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,7 +75,7 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
         private TextView bookTitle;
         private TextView bookSubTitle;
         private TextView bookPrice;
-        private LinearLayout clickableLayout;
+        private FrameLayout clickableLayout;
 
         public ChooseBooksViewHolder(@NonNull View itemView)
         {
@@ -83,7 +84,7 @@ public class ChooseBooksAdapter extends RecyclerView.Adapter<ChooseBooksAdapter.
             bookTitle = itemView.findViewById(R.id.main_element_book_title);
             bookSubTitle = itemView.findViewById(R.id.main_element_book_subtitle);
             bookPrice = itemView.findViewById(R.id.main_element_book_price);
-            clickableLayout = itemView.findViewById(R.id.main_element_ll_clickable);
+            clickableLayout = itemView.findViewById(R.id.main_element_fl_clickable);
         }
 
         public void bind(ShortenedBookInfo shortenedBookInfo)

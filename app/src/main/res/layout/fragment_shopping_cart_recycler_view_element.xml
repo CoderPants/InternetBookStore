@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shopping_cart_element_fl_clickable_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +17,6 @@
             android:id="@+id/shopping_cart_element_iv_book_icon"
             android:layout_width="@dimen/main_recycler_view_element_lv_max_width"
             android:layout_height="@dimen/main_recycler_view_element_lv_max_height"
-            android:background="@color/white80"
             android:scaleType="fitXY"
             android:src = "@drawable/no_book_image_icon"
             android:layout_gravity="center_vertical"

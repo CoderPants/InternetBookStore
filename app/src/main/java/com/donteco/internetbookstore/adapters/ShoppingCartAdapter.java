@@ -1,8 +1,10 @@
 package com.donteco.internetbookstore.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +26,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     public ShoppingCartAdapter(CallBack callBack) {
         shoppingCart = new ArrayList<>();
         this.callBack = callBack;
-        //shoppingCart = Storage.getBooksInCart();
     }
 
     public List<BookInCart> getShoppingCart() {
@@ -71,6 +72,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         private TextView amountOfBooksAndPrice;
         private ImageView deleteOneBook;
 
+        private FrameLayout frameLayout;
+
         public ShopCartViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -81,6 +84,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             addOneMoreBook = itemView.findViewById(R.id.shopping_cart_add_book_btn);
             amountOfBooksAndPrice = itemView.findViewById(R.id.shopping_cart_book_amount_and_price);
             deleteOneBook = itemView.findViewById(R.id.shopping_cart_delete_book_btn);
+            frameLayout = itemView.findViewById(R.id.shopping_cart_element_fl_clickable_layout);
         }
 
         public void bind(BookInCart bookInCart)
@@ -96,11 +100,34 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             String bookValue =  bookInCart.getTotalPrice() + "$";
             bookPrice.setText(bookValue);
 
+            //Else, 'cos of notifydataSetChanged()
+            //Due to new list, added in the adapter, btn can save INVISIBLE state
             if(bookInCart.getAmount() == 1)
                 deleteOneBook.setVisibility(View.INVISIBLE);
+            else
+                deleteOneBook.setVisibility(View.VISIBLE);
 
             addOneBookLogic(bookInCart);
             deleteOneBookLogic(bookInCart);
+
+            frameLayout.setBackground(callBack.getBackGround(false));
+
+            setClickableElementsForFullBookDescription(bookInCart.getId());
+        }
+
+        private void setClickableElementsForFullBookDescription(long id)
+        {
+            bookImage.setOnClickListener(view ->
+            {
+                frameLayout.setBackground(callBack.getBackGround(true));
+                callBack.uploadFullBookInfo(id);
+            });
+
+            bookTitle.setOnClickListener(view ->
+            {
+                frameLayout.setBackground(callBack.getBackGround(true));
+                callBack.uploadFullBookInfo(id);
+            });
         }
 
         private void deleteOneBookLogic(BookInCart bookInCart)
@@ -150,5 +177,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     public interface CallBack{
         void updateBookInCartInfo(BookInCart bookInCart);
         void deleteBookInCart(BookInCart bookInCart);
+        void uploadFullBookInfo(long id);
+        Drawable getBackGround(boolean isCLicked);
     }
 }
