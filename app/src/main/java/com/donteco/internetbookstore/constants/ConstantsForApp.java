@@ -13,4 +13,11 @@ public class ConstantsForApp {
     public static final String SHARED_PREFERENCES_FILE_NAME = "SHARED_PREFERENCES";
     public static final String KEY_FOR_USER_INPUT = "USER_INPUT";
     public static final String KEY_FOR_LAST_RV_POSITION = "LAST_RV_POSITION";
+
+
+    public static final String NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_ID_FIRE_BASE";
+    public static final String NOTIFICATION_DESCRIPTION = "This is notification channel for fire base cloud receiving";
+    public static final String NOTIFICATION_NAME = "NOTIFICATION_CHANNEL_FOR_FIRE_BASE";
+    //(int)(Math.random() * 10000 + 5000);
+    public static final int PENDING_INTENT_ID = 5555;
 }

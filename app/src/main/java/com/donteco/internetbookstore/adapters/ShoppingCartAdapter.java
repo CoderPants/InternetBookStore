@@ -169,7 +169,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         }
 
         private void setPriceAndAmount(BookInCart bookInCart){
-            String textForTv = bookInCart.getAmount() + " X " + bookInCart.getPrice();
+            String textForTv = bookInCart.getAmount() + " x " + bookInCart.getPrice();
             amountOfBooksAndPrice.setText(textForTv);
         }
     }

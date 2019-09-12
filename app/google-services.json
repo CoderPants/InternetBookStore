@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "15158388621",
+    "firebase_url": "https://internetbookstore-a8c2a.firebaseio.com",
+    "project_id": "internetbookstore-a8c2a",
+    "storage_bucket": "internetbookstore-a8c2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15158388621:android:dfe954fcc0e09d83e3ffc4",
+        "android_client_info": {
+          "package_name": "com.donteco.internetbookstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15158388621-2lrm56kjjkpdio4cf1vd9hv0fqkbog75.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.donteco.internetbookstore",
+            "certificate_hash": "d00fa2c7a57ab1a21baf9903d614b8a8586814f9"
+          }
+        },
+        {
+          "client_id": "15158388621-8i2kgkuic7epe2omuqrueub3u0dhmku2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWhbw2c-fPjhCJFHYEHEjXGframJ5kE-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15158388621-8i2kgkuic7epe2omuqrueub3u0dhmku2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
