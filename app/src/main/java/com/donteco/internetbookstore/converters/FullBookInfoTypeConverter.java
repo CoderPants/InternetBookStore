@@ -20,7 +20,7 @@ public class FullBookInfoTypeConverter {
     public static String fromJsonObject(JsonObject value)
     {
         try {
-            return value.toString();
+            return (value==null)? "": value.toString();
         }
         catch (Exception e) {
             Log.e(ConstantsForApp.LOG_TAG, "Exception caused by converting server response to json array. Exception ", e);

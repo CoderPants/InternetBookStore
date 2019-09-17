@@ -39,4 +39,5 @@
     <string name="full_book_description_activity_details">Details</string>
     <string name="cart_fragment_subtotal_before_tax">Subtotal (before tax)</string>
     <string name="cart_fragment_checkout">CHECKOUT</string>
+    <string name="msg_token_fmt">Message token %s</string>
 </resources>

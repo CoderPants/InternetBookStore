@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.notification.MyNotificationBuilder;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,26 +26,15 @@ public class FireBaseInstance extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(ConstantsForApp.LOG_TAG, "From: " + remoteMessage.getFrom());
+        Log.d(ConstantsForApp.LOG_TAG, "Data from message " + remoteMessage.getData().size());
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0)
-        {
-            Log.d(ConstantsForApp.LOG_TAG, "Message data payload: " + remoteMessage.getData());
+        //There is needs to be some kind of check for long and short work
+        Log.d(ConstantsForApp.LOG_TAG, "Message data payload: " + remoteMessage.getData());
 
-            String title = remoteMessage.getNotification().getTitle();
-            String body = remoteMessage.getNotification().getBody();
+        String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();
 
-            MyNotificationBuilder.createNotification(getApplicationContext(), title, body);
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                //scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                //handleNow();
-            }
-
-        }
+        MyNotificationBuilder.createNotification(getApplicationContext(), title, body);
     }
 
     @Override
@@ -57,4 +47,5 @@ public class FireBaseInstance extends FirebaseMessagingService {
         // Instance ID token to your app server.
         //sendRegistrationToServer(token);
     }
+
 }

@@ -13,14 +13,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.activities.FullBookDescription;
 import com.donteco.internetbookstore.adapters.ShoppingCartAdapter;
+import com.donteco.internetbookstore.backgroundwork.BackgroundWork;
 import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
@@ -28,6 +36,7 @@ import com.donteco.internetbookstore.helper.SwipeToDeleteCallBack;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ShoppingCartFragment extends Fragment
 {
@@ -115,6 +124,22 @@ public class ShoppingCartFragment extends Fragment
     public void onResume() {
         setViewModel();
         super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
+                30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
+                .build();*/
+        Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
+        //Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build();
+        //WorkManager.getInstance(activity).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
+        WorkManager.getInstance(activity).enqueue(myWorkRequest);
+
+        super.onStop();
     }
 
     private void setTotalAmount() {

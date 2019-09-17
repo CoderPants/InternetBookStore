@@ -18,7 +18,7 @@ import com.donteco.internetbookstore.constants.ConstantsForApp;
 public class MyNotificationBuilder
 {
 
-    public static void createNotifivationChannel()
+    public static void createNotificationChannel()
     {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
@@ -48,6 +48,27 @@ public class MyNotificationBuilder
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,
                 ConstantsForApp.NOTIFICATION_CHANNEL_ID )
                 .setSmallIcon(R.drawable.ic_new_notification_24dp)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setAutoCancel(true);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, ConstantsForApp.PENDING_INTENT_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationBuilder.setContentIntent(pendingIntent);
+
+        notificationManager.notify(ConstantsForApp.PENDING_INTENT_ID, notificationBuilder.build());
+    }
+
+    public static void createCartNotification(Context context, String title, String body)
+    {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,
+                ConstantsForApp.NOTIFICATION_CHANNEL_ID )
+                .setSmallIcon(R.drawable.ic_shopping_cart_notification_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
