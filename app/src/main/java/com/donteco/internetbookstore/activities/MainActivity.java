@@ -69,11 +69,19 @@ public class MainActivity extends BaseActivity
     {
         String fragment = getIntent().getStringExtra(IntentKeys.PUSH_NOTIFICATION);
 
-        if(fragment != null && fragment.equals(ConstantsForApp.SEARCH_FRAGMENT))
+        if(fragment != null)
         {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(IntentKeys.NEED_NEW_BOOKS, true);
-            navController.navigate(R.id.book_search_bottom_navigation, bundle);
+            switch (fragment)
+            {
+                case ConstantsForApp.SEARCH_FRAGMENT:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(IntentKeys.NEED_NEW_BOOKS, true);
+                    navController.navigate(R.id.book_search_bottom_navigation, bundle);
+                    break;
+
+                case ConstantsForApp.SHOPPING_CART_FRAGMENT:
+                    navController.navigate(R.id.shopping_cart_bottom_navigation);
+            }
         }
 
     }

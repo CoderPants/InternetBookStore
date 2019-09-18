@@ -245,7 +245,7 @@ public class SearchBooksFragment extends Fragment
             userInput = Storage.getUserInput();
             searchBar.setText(userInput);
         }
-        Log.i(ConstantsForApp.LOG_TAG, "On resume " + getArguments() + " userInput " + userInput );
+        //Log.i(ConstantsForApp.LOG_TAG, "On resume " + getArguments() + " userInput " + userInput );
         if(userInput.length() != 0)
         {
             viewModel.setUserInputLiveData(userInput);

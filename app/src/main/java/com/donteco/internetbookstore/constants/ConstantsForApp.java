@@ -22,4 +22,5 @@ public class ConstantsForApp {
     public static final int PENDING_INTENT_ID = 5555;
 
     public static final String SEARCH_FRAGMENT = "SEARCH_BOOK_FRAGMENT";
+    public static final String SHOPPING_CART_FRAGMENT = "SHOPPING_CART_FRAGMENT";
 }

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Constraints;
+import androidx.work.Data;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
@@ -30,12 +31,14 @@ import com.donteco.internetbookstore.activities.FullBookDescription;
 import com.donteco.internetbookstore.adapters.ShoppingCartAdapter;
 import com.donteco.internetbookstore.backgroundwork.BackgroundWork;
 import com.donteco.internetbookstore.books.BookInCart;
+import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.helper.SwipeToDeleteCallBack;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class ShoppingCartFragment extends Fragment
@@ -131,13 +134,45 @@ public class ShoppingCartFragment extends Fragment
         /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
                 30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
                 .build();*/
-       /* Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
-        //Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
+                30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
+                .build();*/
+        Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
+
+        List<BookInCart> cart = adapter.getShoppingCart();
+        int amountOfBooks = 0;
+        int i = 1;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (BookInCart bookInCart : cart)
+        {
+            amountOfBooks += bookInCart.getAmount();
+            if(i <= 5)
+            {
+                stringBuilder.append(String.format(Locale.ENGLISH,
+                        "%d) %s x%d\n", i, bookInCart.getTitle(), bookInCart.getAmount()));
+            }
+            i++;
+        }
+
+        if(i > 5)
+            stringBuilder.append("And more!");
+
+
+        //Constraints constraints = new Constraints.Builder().setRequiresCharging(true).build();
+        Data data = new Data.Builder()
+                .putString(IntentKeys.AMOUNT_OF_BOOKS_IN_CART, String.valueOf(amountOfBooks))
+                .putString(IntentKeys.BOOKS_IN_CART, stringBuilder.toString())
+                .build();
+
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
                 .setInitialDelay(10, TimeUnit.SECONDS)
+                //.setConstraints(constraints)
+                .setInputData(data)
                 .build();
-        //WorkManager.getInstance(activity).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
-        WorkManager.getInstance(activity).enqueue(myWorkRequest);*/
+        //WorkRequest workRequest = new WorkRequest.Builder<>()
+        WorkManager.getInstance(activity).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
+        //WorkManager.getInstance(this).enqueue(myWorkRequest);
 
         super.onStop();
     }

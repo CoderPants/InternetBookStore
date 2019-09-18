@@ -64,7 +64,7 @@ public class MyNotificationBuilder
         notificationManager.notify(ConstantsForApp.PENDING_INTENT_ID, notificationBuilder.build());
     }
 
-    public static void createCartNotification(Context context, String title, String body)
+    public static void createCartNotification(Context context, String title, String text, String body)
     {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
@@ -72,12 +72,15 @@ public class MyNotificationBuilder
                 ConstantsForApp.NOTIFICATION_CHANNEL_ID )
                 .setSmallIcon(R.drawable.ic_shopping_cart_notification_24dp)
                 .setContentTitle(title)
-                .setContentText(body)
+                .setContentText(text)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
                 .setAutoCancel(true);
 
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(IntentKeys.PUSH_NOTIFICATION, ConstantsForApp.SHOPPING_CART_FRAGMENT);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, ConstantsForApp.PENDING_INTENT_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingIntent);

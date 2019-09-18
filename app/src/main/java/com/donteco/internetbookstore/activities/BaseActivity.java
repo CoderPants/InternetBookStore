@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -25,18 +26,6 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         Storage.pushAllToStorage();
-
-        /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
-                30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
-                .build();*/
-        Log.d(ConstantsForApp.LOG_TAG, "Passed on destroy ");
-        //Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
-                .setInitialDelay(20, TimeUnit.SECONDS)
-                .build();
-        //WorkRequest workRequest = new WorkRequest.Builder<>()
-        WorkManager.getInstance(this).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
-        //WorkManager.getInstance(this).enqueue(myWorkRequest);
         super.onDestroy();
     }
 }

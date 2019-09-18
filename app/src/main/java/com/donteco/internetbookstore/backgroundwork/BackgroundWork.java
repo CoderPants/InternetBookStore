@@ -11,6 +11,7 @@ import androidx.work.WorkerParameters;
 
 import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
+import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.donteco.internetbookstore.notification.MyNotificationBuilder;
 
@@ -30,8 +31,11 @@ public class BackgroundWork extends Worker
     {
         //Data data = getInputData();
         try{
-            Log.d(ConstantsForApp.LOG_TAG, "Got into worker!" );
-            MyNotificationBuilder.createCartNotification(getApplicationContext(), "You have some not ordered books! ", "Big cart!");
+            Data data = getInputData();
+            MyNotificationBuilder.createCartNotification(getApplicationContext(),
+                    String.format("You have %s unordered books in your cart!", data.getString(IntentKeys.AMOUNT_OF_BOOKS_IN_CART) ),
+                    "Click to see your cart",
+                    String.format("Your cart:\n\n%s", data.getString(IntentKeys.BOOKS_IN_CART)));
 
             return Result.success();
         }
