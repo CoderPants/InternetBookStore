@@ -131,13 +131,13 @@ public class ShoppingCartFragment extends Fragment
         /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
                 30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
                 .build();*/
-        Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
+       /* Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
         //Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
                 .setInitialDelay(10, TimeUnit.SECONDS)
                 .build();
         //WorkManager.getInstance(activity).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
-        WorkManager.getInstance(activity).enqueue(myWorkRequest);
+        WorkManager.getInstance(activity).enqueue(myWorkRequest);*/
 
         super.onStop();
     }

@@ -144,6 +144,11 @@ public class FullBookDescription extends BaseActivity {
                         "Sorry, there is no book info on server!",
                         Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onGetNewBooks(List<ShortenedBookInfo> receivedShortenedBooksInfo) {
+                //Nothing
+            }
         });
     }
 

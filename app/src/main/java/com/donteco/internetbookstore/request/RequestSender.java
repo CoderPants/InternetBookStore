@@ -115,6 +115,31 @@ public class RequestSender {
         });
     }
 
+    public void sentGetNewBooks()
+    {
+        GetDataService service = RetrofitClientInstance.getInstance().create(GetDataService.class);
+
+        Call<ServerSearchResponceNewBooks> getNewBooksCall = service.getNewBooks();
+
+        getNewBooksCall.enqueue(new Callback<ServerSearchResponceNewBooks>() {
+            @Override
+            public void onResponse(Call<ServerSearchResponceNewBooks> call,
+                                   Response<ServerSearchResponceNewBooks> response)
+            {
+                ServerSearchResponceNewBooks serverSearchResponceNewBooks = response.body();
+                callBack.onGetNewBooks(serverSearchResponceNewBooks.getShortenedBooksInfo());
+            }
+
+            @Override
+            public void onFailure(Call<ServerSearchResponceNewBooks> call, Throwable t) {
+                Log.e(ConstantsForApp.LOG_TAG,
+                        "Failure in getting response from server! " +
+                                "Caused in RequestSender in sentGetFullBookInfo." +
+                                " Call itself " + call.request().toString(), t);
+            }
+        });
+    }
+
     public int getTotalNumberOfBooks() {
         return totalNumberOfBooks;
     }
@@ -122,6 +147,7 @@ public class RequestSender {
     public interface RequestCallBack {
         void onGetBooksResponse(List<ShortenedBookInfo> receivedShortenedBooksInfo);
         void onGetBookInfoResponse(FullBookInfo fullBookInfo);
+        void onGetNewBooks(List<ShortenedBookInfo> receivedShortenedBooksInfo);
         void onNoBooksCondition();
     }
 }

@@ -2,7 +2,6 @@ package com.donteco.internetbookstore.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,12 +80,23 @@ public class SearchBooksFragment extends Fragment
 
         searchBar = view.findViewById(R.id.book_search_bar);
         searchBarKeyLogic();
+
         searchBooksBtnLogic(view.findViewById(R.id.book_search_iv));
 
         recyclerView = view.findViewById(R.id.rv_books);
         recyclerViewCreation();
 
         setLiveDataObserver();
+
+        //If there is no new books in db
+        if(getArguments() != null
+                && getArguments().getBoolean(IntentKeys.NEED_NEW_BOOKS)
+                && adapter.getItemCount() == 0)
+        {
+            requestSender.sentGetNewBooks();
+            loadingIndicator.setVisibility(View.VISIBLE);
+            scrollRV(0);
+        }
     }
 
     private void searchBarKeyLogic()
@@ -115,14 +123,7 @@ public class SearchBooksFragment extends Fragment
 
     private void setLiveDataObserver(){
         viewModel.getShortenedInfoBooks().observe(SearchBooksFragment.this, bookInfos ->
-        {
-            adapter.setBooks(bookInfos);
-
-            if(adapter.getItemCount() == 0)
-                loadingIndicator.setVisibility(View.VISIBLE);
-            else
-                loadingIndicator.setVisibility(View.INVISIBLE);
-        });
+                adapter.setBooks(bookInfos));
     }
 
     private void searchBooksBtnLogic(ImageView imageView) {
@@ -140,10 +141,18 @@ public class SearchBooksFragment extends Fragment
             return;
 
         if(SearchBooksHelper.isNetworkAvailable(activity))
-            requestSender.sentGetTotalBooksAmount(userInput);
+        {
+            //To different requests for new books and for standart one
+            if(userInput.equals("new"))
+            {
+                requestSender.sentGetNewBooks();
+                loadingIndicator.setVisibility(View.VISIBLE);
+            }
+            else
+                requestSender.sentGetTotalBooksAmount(userInput);
+        }
 
-        //On changing this we change live recyclerView
-        viewModel.setuserInputLiveData(userInput);
+        viewModel.setUserInputLiveData(userInput);
     }
 
     private void requestSenderCreation() {
@@ -172,6 +181,21 @@ public class SearchBooksFragment extends Fragment
             public void onNoBooksCondition() {
                 loadingIndicator.setVisibility(View.INVISIBLE);
                 Toast.makeText(activity, "Sorry, no books found!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onGetNewBooks(List<ShortenedBookInfo> receivedShortenedBooksInfo)
+            {
+                String stringForBar = "new";
+                searchBar.setText(stringForBar);
+
+                if(SearchBooksHelper.noNewBooksInDb(receivedShortenedBooksInfo, adapter.getBooks()))
+                {
+                    viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
+                    viewModel.insertCachedBooksInfo(
+                            SearchBooksHelper.convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
+                }
+                loadingIndicator.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -211,12 +235,20 @@ public class SearchBooksFragment extends Fragment
     @Override
     public void onResume()
     {
-        userInput = Storage.getUserInput();
-        searchBar.setText(userInput);
-
+        if(getArguments() != null && getArguments().getBoolean(IntentKeys.NEED_NEW_BOOKS))
+        {
+            userInput = "new";
+            searchBar.setText(userInput);
+        }
+        else
+        {
+            userInput = Storage.getUserInput();
+            searchBar.setText(userInput);
+        }
+        Log.i(ConstantsForApp.LOG_TAG, "On resume " + getArguments() + " userInput " + userInput );
         if(userInput.length() != 0)
         {
-            viewModel.setuserInputLiveData(userInput);
+            viewModel.setUserInputLiveData(userInput);
             setLiveDataObserver();
         }
 

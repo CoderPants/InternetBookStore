@@ -36,7 +36,7 @@ public class BookStorageApplication extends Application {
                     //cdk5H6MqQFo:APA91bGHFNK1EMZoWLYdI5x8CWq_kS-QJbwgUq1L8O0Elo30caalbyRLBN0z3A32Kmsoh5K8vh6VfG9MzQqPTtdSpY9xo7A8w5mKQNI3iByRcnzOlzzeSwGXLdZ9JjtDpyvUiD-lRCT6
                     // Log and toast
                     String msg = getString(R.string.msg_token_fmt, token);
-                    Log.d(ConstantsForApp.LOG_TAG, msg);
+                    Log.i(ConstantsForApp.LOG_TAG, msg);
                 });
     }
 

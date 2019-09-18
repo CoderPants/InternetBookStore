@@ -29,9 +29,15 @@ public class BackgroundWork extends Worker
     public Result doWork()
     {
         //Data data = getInputData();
-        Log.d(ConstantsForApp.LOG_TAG, "Got into worker!" );
-        MyNotificationBuilder.createCartNotification(getApplicationContext(), "You have some not ordered books! ", "Big cart!");
+        try{
+            Log.d(ConstantsForApp.LOG_TAG, "Got into worker!" );
+            MyNotificationBuilder.createCartNotification(getApplicationContext(), "You have some not ordered books! ", "Big cart!");
 
-        return Result.success();
+            return Result.success();
+        }
+        catch (Exception e){
+            Log.e(ConstantsForApp.LOG_TAG, "Exception in work manager in doWork method()", e);
+            return Result.failure();
+        }
     }
 }

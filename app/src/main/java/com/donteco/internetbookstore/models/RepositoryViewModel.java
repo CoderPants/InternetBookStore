@@ -49,7 +49,7 @@ public class RepositoryViewModel extends AndroidViewModel {
         return repository.getFullBookInfoById(id);
     }
 
-    public void setuserInputLiveData(String userInput) {
+    public void setUserInputLiveData(String userInput) {
         userInputLiveData.setValue(userInput);
     }
 

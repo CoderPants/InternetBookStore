@@ -43,6 +43,21 @@ public class SearchBooksHelper
                 && (counter != lastPackOfBooks);
     }
 
+    public static boolean noNewBooksInDb(List<ShortenedBookInfo> responseFromServer,
+                                         List<ShortenedBookInfo> listFromAdapter)
+    {
+        //I don't actually know, what size will come
+        if(responseFromServer.size() != listFromAdapter.size())
+            return true;
+
+        for (ShortenedBookInfo shortenedBookInfo : responseFromServer) {
+            if(!listFromAdapter.contains(shortenedBookInfo))
+                return true;
+        }
+
+        return false;
+    }
+
     public static List<CachedBook> convertToCachedBooks(List<ShortenedBookInfo> receivedShortenedBooksInfo,
                                                     String userInput)
     {

@@ -14,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.activities.MainActivity;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
+import com.donteco.internetbookstore.constants.IntentKeys;
 
 public class MyNotificationBuilder
 {
@@ -55,6 +56,7 @@ public class MyNotificationBuilder
                 .setAutoCancel(true);
 
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(IntentKeys.PUSH_NOTIFICATION, ConstantsForApp.SEARCH_FRAGMENT);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, ConstantsForApp.PENDING_INTENT_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingIntent);

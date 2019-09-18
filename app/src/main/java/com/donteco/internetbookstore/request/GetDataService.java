@@ -17,4 +17,7 @@ public interface GetDataService {
 
     @GET("/1.0/books/{bookID}")
     Call<FullBookInfo> getBookById(@Path("bookID") long bookID);
+
+    @GET("/1.0/new")
+    Call<ServerSearchResponceNewBooks> getNewBooks();
 }

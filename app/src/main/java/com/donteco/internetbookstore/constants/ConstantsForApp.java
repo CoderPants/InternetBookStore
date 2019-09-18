@@ -20,4 +20,6 @@ public class ConstantsForApp {
     public static final String NOTIFICATION_NAME = "NOTIFICATION_CHANNEL_FOR_FIRE_BASE";
     //(int)(Math.random() * 10000 + 5000);
     public static final int PENDING_INTENT_ID = 5555;
+
+    public static final String SEARCH_FRAGMENT = "SEARCH_BOOK_FRAGMENT";
 }
