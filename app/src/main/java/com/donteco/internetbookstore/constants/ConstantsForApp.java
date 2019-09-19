@@ -23,4 +23,7 @@ public class ConstantsForApp {
 
     public static final String SEARCH_FRAGMENT = "SEARCH_BOOK_FRAGMENT";
     public static final String SHOPPING_CART_FRAGMENT = "SHOPPING_CART_FRAGMENT";
+
+    public static final int AMOUNT_OF_DELAY = 10;
+    public static final String WORKER_UNIQUE_ID = "Work";
 }

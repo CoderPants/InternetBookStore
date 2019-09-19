@@ -99,6 +99,7 @@ public class FullBookDescription extends BaseActivity {
         getFullBookInfo();
 
         addBtn = findViewById(R.id.full_book_description_fab_for_adding_to_cart);
+        addBtn.setClickable(false);
 
         addToCartLogic(addBtn);
 
@@ -134,6 +135,7 @@ public class FullBookDescription extends BaseActivity {
             public void onGetBookInfoResponse(FullBookInfo fullBookInfo) {
                 loadingIndicator.setVisibility(View.INVISIBLE);
                 fillActivity(fullBookInfo);
+                addBtn.setClickable(true);
                 viewModel.insertFullBookInfo(fullBookInfo);
             }
 

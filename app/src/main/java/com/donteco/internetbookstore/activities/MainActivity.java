@@ -9,10 +9,14 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.donteco.internetbookstore.R;
 import com.donteco.internetbookstore.adapters.ShoppingCartAdapter;
@@ -25,6 +29,8 @@ import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity
 {
@@ -63,6 +69,29 @@ public class MainActivity extends BaseActivity
 
         //Redirect intent data to fragment
         redirectToFragment();
+
+        observeWorkManager();
+    }
+
+    private void observeWorkManager() {
+        LiveData<List<WorkInfo>> savedInstance = WorkManager
+                .getInstance(getApplicationContext())
+                .getWorkInfosByTagLiveData("WorkRequest");
+
+        savedInstance.observe(this, workInfos ->
+        {
+            // If there are no matching work info, do nothing
+            if (workInfos == null || workInfos.isEmpty())
+                return;
+
+            // We only care about the first output status.
+            // Every continuation has only one worker tagged TAG_OUTPUT
+            WorkInfo workInfo = workInfos.get(0);
+
+            Log.i(ConstantsForApp.LOG_TAG,
+                    "Work info observer is work finished " + workInfo.getState().isFinished() +
+                    ", work state is " + workInfo.getState().name() );
+        });
     }
 
     private void redirectToFragment()

@@ -131,15 +131,17 @@ public class ShoppingCartFragment extends Fragment
 
     @Override
     public void onStop() {
-        /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
-                30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
-                .build();*/
-        /*PeriodicWorkRequest myWorkRequest = new PeriodicWorkRequest.Builder(BackgroundWork.class,
-                30, TimeUnit.MINUTES, 25, TimeUnit.MINUTES)
-                .build();*/
-        Log.d(ConstantsForApp.LOG_TAG, "Passed on stop ");
+        createWork();
+        super.onStop();
+    }
 
+    private void createWork()
+    {
         List<BookInCart> cart = adapter.getShoppingCart();
+
+        if(cart.size() == 0)
+            return;
+
         int amountOfBooks = 0;
         int i = 1;
         StringBuilder stringBuilder = new StringBuilder();
@@ -158,24 +160,20 @@ public class ShoppingCartFragment extends Fragment
         if(i > 5)
             stringBuilder.append("And more!");
 
-
-        //Constraints constraints = new Constraints.Builder().setRequiresCharging(true).build();
         Data data = new Data.Builder()
                 .putString(IntentKeys.AMOUNT_OF_BOOKS_IN_CART, String.valueOf(amountOfBooks))
                 .putString(IntentKeys.BOOKS_IN_CART, stringBuilder.toString())
                 .build();
 
         OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
-                .setInitialDelay(10, TimeUnit.SECONDS)
-                //.setConstraints(constraints)
+                .setInitialDelay(ConstantsForApp.AMOUNT_OF_DELAY, TimeUnit.SECONDS)
                 .setInputData(data)
+                .addTag("WorkRequest")
                 .build();
-        //WorkRequest workRequest = new WorkRequest.Builder<>()
-        WorkManager.getInstance(activity).enqueueUniqueWork("Work", ExistingWorkPolicy.REPLACE, myWorkRequest);
-        //WorkManager.getInstance(this).enqueue(myWorkRequest);
 
-        super.onStop();
+        WorkManager.getInstance(activity).enqueueUniqueWork(ConstantsForApp.WORKER_UNIQUE_ID, ExistingWorkPolicy.REPLACE, myWorkRequest);
     }
+
 
     private void setTotalAmount() {
         List<BookInCart> cart = adapter.getShoppingCart();
