@@ -33,6 +33,10 @@ public interface BookInCartDao
             "FROM shopping_cart")
     LiveData<List<BookInCart>> getCart();
 
+    @Query("SELECT *" +
+            "FROM shopping_cart")
+    List<BookInCart> getCartByAsync();
+
     /*@Query("SELECT *" +
             "FROM shopping_cart " +
             "WHERE id LIKE :id")

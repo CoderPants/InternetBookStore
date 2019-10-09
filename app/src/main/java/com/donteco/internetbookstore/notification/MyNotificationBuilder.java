@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -42,13 +43,12 @@ public class MyNotificationBuilder
         }
     }
 
-    public static void createNotification(Context context, String title, String body)
+    public static void createNotification(Context context, String title, String body, String fragment)
     {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,
                 ConstantsForApp.NOTIFICATION_CHANNEL_ID )
-                .setSmallIcon(R.drawable.ic_new_notification_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -56,15 +56,29 @@ public class MyNotificationBuilder
                 .setAutoCancel(true);
 
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(IntentKeys.PUSH_NOTIFICATION, ConstantsForApp.SEARCH_FRAGMENT);
+        intent.putExtra(IntentKeys.PUSH_NOTIFICATION, fragment.toUpperCase());
         PendingIntent pendingIntent = PendingIntent.getActivity(context, ConstantsForApp.PENDING_INTENT_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         notificationBuilder.setContentIntent(pendingIntent);
 
+        switch (fragment.toUpperCase())
+        {
+            case ConstantsForApp.SEARCH_FRAGMENT:
+                notificationBuilder.setSmallIcon(R.drawable.ic_new_notification_24dp);
+                break;
+
+            case ConstantsForApp.SHOPPING_CART_FRAGMENT:
+                notificationBuilder
+                        .setSmallIcon(R.drawable.ic_shopping_cart_notification_24dp)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(body));
+                break;
+        }
+
+        Log.d(ConstantsForApp.LOG_TAG, "Passed notification creation");
         notificationManager.notify(ConstantsForApp.PENDING_INTENT_ID, notificationBuilder.build());
     }
 
-    public static void createCartNotification(Context context, String title, String text, String body)
+    /*public static void createCartNotification(Context context, String title, String text, String body)
     {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
@@ -86,5 +100,5 @@ public class MyNotificationBuilder
         notificationBuilder.setContentIntent(pendingIntent);
 
         notificationManager.notify(ConstantsForApp.PENDING_INTENT_ID, notificationBuilder.build());
-    }
+    }*/
 }

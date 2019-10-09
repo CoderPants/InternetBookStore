@@ -18,7 +18,7 @@
             android:layout_width="@dimen/main_recycler_view_element_lv_max_width"
             android:layout_height="@dimen/main_recycler_view_element_lv_max_height"
             android:scaleType="fitXY"
-            android:src = "@drawable/no_book_image_icon"
+            android:src ="@drawable/no_book_image_icon"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/main_element_iv_margin_end"
             android:layout_weight="1"

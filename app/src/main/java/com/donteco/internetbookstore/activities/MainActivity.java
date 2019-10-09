@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,6 +29,7 @@ import com.donteco.internetbookstore.constants.IntentKeys;
 import com.donteco.internetbookstore.fragments.SearchBooksFragment;
 import com.donteco.internetbookstore.fragments.ShoppingCartFragment;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
+import com.donteco.internetbookstore.storage.Storage;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,7 +56,7 @@ public class MainActivity extends BaseActivity
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         //Create red dot with amount of books in cart
-        BottomNavigationMenuView bottomNavigationMenuView =(BottomNavigationMenuView)
+        BottomNavigationMenuView bottomNavigationMenuView = (BottomNavigationMenuView)
                 bottomNavigationView.getChildAt(0);
 
         View view = bottomNavigationMenuView.getChildAt(1);

@@ -129,52 +129,6 @@ public class ShoppingCartFragment extends Fragment
         super.onResume();
     }
 
-    @Override
-    public void onStop() {
-        createWork();
-        super.onStop();
-    }
-
-    private void createWork()
-    {
-        List<BookInCart> cart = adapter.getShoppingCart();
-
-        if(cart.size() == 0)
-            return;
-
-        int amountOfBooks = 0;
-        int i = 1;
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (BookInCart bookInCart : cart)
-        {
-            amountOfBooks += bookInCart.getAmount();
-            if(i <= 5)
-            {
-                stringBuilder.append(String.format(Locale.ENGLISH,
-                        "%d) %s x%d\n", i, bookInCart.getTitle(), bookInCart.getAmount()));
-            }
-            i++;
-        }
-
-        if(i > 5)
-            stringBuilder.append("And more!");
-
-        Data data = new Data.Builder()
-                .putString(IntentKeys.AMOUNT_OF_BOOKS_IN_CART, String.valueOf(amountOfBooks))
-                .putString(IntentKeys.BOOKS_IN_CART, stringBuilder.toString())
-                .build();
-
-        OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(BackgroundWork.class)
-                .setInitialDelay(ConstantsForApp.AMOUNT_OF_DELAY, TimeUnit.SECONDS)
-                .setInputData(data)
-                .addTag("WorkRequest")
-                .build();
-
-        WorkManager.getInstance(activity).enqueueUniqueWork(ConstantsForApp.WORKER_UNIQUE_ID, ExistingWorkPolicy.REPLACE, myWorkRequest);
-    }
-
-
     private void setTotalAmount() {
         List<BookInCart> cart = adapter.getShoppingCart();
         amountOfMoney = 0;

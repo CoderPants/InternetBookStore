@@ -1,20 +1,29 @@
 package com.donteco.internetbookstore.models;
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
+import com.donteco.internetbookstore.backgroundwork.BackgroundWork;
 import com.donteco.internetbookstore.books.BookInCart;
 import com.donteco.internetbookstore.books.CachedBook;
 import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
+import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.storage.Repository;
+import com.donteco.internetbookstore.storage.Storage;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RepositoryViewModel extends AndroidViewModel {
     private Repository repository;
@@ -76,5 +85,4 @@ public class RepositoryViewModel extends AndroidViewModel {
     public LiveData<List<BookInCart>> getCart(){
         return repository.getCart();
     }
-
 }

@@ -11,30 +11,24 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-//Token
-//dOqRcDV31Ys:APA91bGHvdrzUwjhm1WxHOK1LRbRKEffLjq0qhkAEvVLP3DE3U2AUw64OboAAwVrSTdxQZ3gNWs6mHsZYjBx_40kTo4fltv96aTPH6Sm-hFMXLCddfV4Z1pzOKN3VDhLQYqKf6v3lN28
 public class FireBaseInstance extends FirebaseMessagingService {
     public FireBaseInstance() {
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // ...
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(ConstantsForApp.LOG_TAG, "From: " + remoteMessage.getFrom());
         Log.d(ConstantsForApp.LOG_TAG, "Data from message " + remoteMessage.getData().size());
-
-        //There is needs to be some kind of check for long and short work
         Log.d(ConstantsForApp.LOG_TAG, "Message data payload: " + remoteMessage.getData());
 
         Map<String, String> pushData = remoteMessage.getData();
         String title = pushData.get("body");
         String body = pushData.get("title");
-        String location = pushData.get("fragment");
+        String fragment = pushData.get("fragment");
 
-        MyNotificationBuilder.createNotification(getApplicationContext(), title, body);
+        assert fragment != null;
+        MyNotificationBuilder.createNotification(getApplicationContext(), title, body, fragment);
     }
 
     @Override
