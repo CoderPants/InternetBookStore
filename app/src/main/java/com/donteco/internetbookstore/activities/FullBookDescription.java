@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.donteco.internetbookstore.R;
@@ -26,6 +25,7 @@ import com.donteco.internetbookstore.books.FullBookInfo;
 import com.donteco.internetbookstore.books.ShortenedBookInfo;
 import com.donteco.internetbookstore.constants.ConstantsForApp;
 import com.donteco.internetbookstore.constants.IntentKeys;
+//import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.donteco.internetbookstore.models.RepositoryViewModel;
 import com.donteco.internetbookstore.request.RequestSender;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -136,7 +136,7 @@ public class FullBookDescription extends BaseActivity {
                 loadingIndicator.setVisibility(View.INVISIBLE);
                 fillActivity(fullBookInfo);
                 addBtn.setClickable(true);
-                viewModel.insertFullBookInfo(fullBookInfo);
+                viewModel.insertFullBookInfoAsync(fullBookInfo);
             }
 
             @Override
@@ -173,7 +173,7 @@ public class FullBookDescription extends BaseActivity {
         {
             try
             {
-                viewModel.insertBookToCart( new BookInCart( bookId, bookTitle, bookPrice, 1, bookImage) );
+                viewModel.insertBookToCartAsync( new BookInCart( bookId, bookTitle, bookPrice, 1, bookImage) );
 
                 Toast.makeText(getApplicationContext(), "Book was successfully added to the cart!", Toast.LENGTH_SHORT).show();
             }

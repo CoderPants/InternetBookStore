@@ -165,8 +165,8 @@ public class SearchBooksFragment extends Fragment
                         adapter.getBooks(),
                         requestSender.getTotalNumberOfBooks() % 10))
                 {
-                    viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
-                    viewModel.insertCachedBooksInfo(
+                    viewModel.insertShortenedBooksInfoAsync(receivedShortenedBooksInfo);
+                    viewModel.insertCachedBooksInfoAsync(
                             SearchBooksHelper.convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
                 }
                 loadingIndicator.setVisibility(View.INVISIBLE);
@@ -191,8 +191,8 @@ public class SearchBooksFragment extends Fragment
 
                 if(SearchBooksHelper.noNewBooksInDb(receivedShortenedBooksInfo, adapter.getBooks()))
                 {
-                    viewModel.insertShortenedBooksInfo(receivedShortenedBooksInfo);
-                    viewModel.insertCachedBooksInfo(
+                    viewModel.insertShortenedBooksInfoAsync(receivedShortenedBooksInfo);
+                    viewModel.insertCachedBooksInfoAsync(
                             SearchBooksHelper.convertToCachedBooks(receivedShortenedBooksInfo, userInput) );
                 }
                 loadingIndicator.setVisibility(View.INVISIBLE);
